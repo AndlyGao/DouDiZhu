@@ -53,6 +53,8 @@ public class MatchPanel : UIBase {
 
         ObjectsActive(false);
         enterBtn.gameObject.SetActive(false);
+
+        //SetPanelActive(false);
     }
 
     void Update()

@@ -22,7 +22,7 @@ public class MsgCenter : MonoBase
         gameObject.AddComponent<NetManager>();
         gameObject.AddComponent<SceneMgr>();
 
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>

@@ -25,6 +25,8 @@ public class SetPanel : UIBase {
     private Slider volSld;
     private Button quitBtn;
     private Image bgImg;
+    private Text audioTxt;
+    private Text volTxt;
 
     private void Start()
     {
@@ -34,9 +36,12 @@ public class SetPanel : UIBase {
         audioTog = transform.Find("audioTog").GetComponent<Toggle>();
         volSld = transform.Find("volSld").GetComponent<Slider>();
         bgImg = transform.Find("bgImg").GetComponent<Image>();
+        audioTxt = transform.Find("audioTxt").GetComponent<Text>();
+        volTxt = transform.Find("volTxt").GetComponent<Text>();
 
         //默认状态
-        SetPanelActive(false);
+        //SetPanelActive(false);
+        Active(false);
 
         setBtn.onClick.AddListener(SetBtnClick);
         closeBtn.onClick.AddListener(CloseBtnClick);
@@ -45,16 +50,27 @@ public class SetPanel : UIBase {
         volSld.onValueChanged.AddListener(VolSldValueChanged);
     }
 
+    private void Active(bool b)
+    {
+        closeBtn.gameObject.SetActive(b);
+        audioTog.gameObject.SetActive(b);
+        volSld.gameObject.SetActive(b);
+        quitBtn.gameObject.SetActive(b);
+        bgImg.gameObject.SetActive(b);
+        audioTxt.gameObject.SetActive(b);
+        volTxt.gameObject.SetActive(b);
+    }
+
     private void SetBtnClick()
     {
-        SetPanelActive(true);
+        Active(!bgImg.gameObject.activeInHierarchy);
     }
     /// <summary>
     /// 关闭按钮事件
     /// </summary>
     private void CloseBtnClick()
     {
-        SetPanelActive(false);
+        Active(false);
     }
     /// <summary>
     /// 退出按钮事件

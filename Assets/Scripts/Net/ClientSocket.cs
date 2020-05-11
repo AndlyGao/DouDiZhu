@@ -120,7 +120,7 @@ public class ClientSocket  {
 
         MessageData msg = EncodTool.DecodeMsg(temData);
         messageDataQueue.Enqueue(msg);
-        Debug.Log("收到服务器消息： " + msg.Value.ToString());
+        //Debug.Log("收到服务器消息： " + msg.Value.ToString());
 
         //递归 一直接受消息
         ProcessReceiveMsg();

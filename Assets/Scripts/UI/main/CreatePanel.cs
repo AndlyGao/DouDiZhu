@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Protocol.Code;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,19 +31,19 @@ public class CreatePanel : UIBase
     private InputField inputName;
     private Button btnCreate;
 
-    private UIMsg uiMsg;
-    private MessageData serverMsg;
+    private UIMsg uiMsg = new UIMsg();
+    private MessageData serverMsg = new MessageData();
 
     // Start is called before the first frame update
     void Start()
     {
-        uiMsg = new UIMsg();
-        serverMsg = new MessageData();
 
         inputName = transform.Find("inputName").GetComponent<InputField>();
         btnCreate = transform.Find("btnCreate").GetComponent<Button>();
 
         btnCreate.onClick.AddListener(CreateClick);
+
+        SetPanelActive(false);
     }
 
 
@@ -60,9 +61,10 @@ public class CreatePanel : UIBase
             Dispatch(AreaCode.UI,UIEvent.MessageInfoPanel,uiMsg);
             return;
         }
-       
+
         //给服务器发消息 创建角色
-        //TODO
+        serverMsg.Set(OpCode.USER,UserCode.CREAT_CREQ,inputName.text);
+        Dispatch(AreaCode.NET,0,serverMsg);
     }
     
 }
