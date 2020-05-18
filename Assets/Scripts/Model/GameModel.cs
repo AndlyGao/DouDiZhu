@@ -12,4 +12,10 @@ public class GameModel
     /// 登陆用户的数据
     /// </summary>
     public UserDto UserDto { get; set; }
+
+    /// <summary>
+    /// 匹配房间的数据
+    /// </summary>
+    public MatchRoomDto MatchRoomDto { get; set; }
+
 }

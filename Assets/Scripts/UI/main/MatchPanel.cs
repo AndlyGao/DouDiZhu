@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Protocol.Code;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ public class MatchPanel : UIBase {
     private Button cancelBtn;
     private Button enterBtn;
 
+
+    private MessageData serverMsg;
 
     //匹配动画变量
 
@@ -54,6 +57,7 @@ public class MatchPanel : UIBase {
         ObjectsActive(false);
         enterBtn.gameObject.SetActive(false);
 
+        serverMsg = new MessageData();
         //SetPanelActive(false);
     }
 
@@ -86,8 +90,9 @@ public class MatchPanel : UIBase {
     /// </summary>
     private void StartMatch()
     {
-        //TODO 向服务器发起匹配请求
-
+        //向服务器发起匹配请求
+        serverMsg.Set(OpCode.MATCHROOM,MatchRoomCode.STARTMATCH_CREQ,null);
+        Dispatch(AreaCode.NET,0,serverMsg);
         //匹配动画
         ObjectsActive(true);
         DoAnimation();
@@ -99,7 +104,12 @@ public class MatchPanel : UIBase {
     /// </summary>
     private void EnterGame()
     {
-        
+        LoadSceneMsg msg = new LoadSceneMsg(2,()=> {
+            Debug.Log("匹配成功 ：进入战斗场景");
+            //TODO 进入了战斗场景需要干什么
+        });
+        //切换到战斗场景
+        Dispatch(AreaCode.SCENE,SceneEvent.LOAD_SCENE,msg);
     }
 
     /// <summary>
@@ -108,6 +118,8 @@ public class MatchPanel : UIBase {
     private void CancelMatch()
     {
         ObjectsActive(false);
+        serverMsg.Set(OpCode.MATCHROOM, MatchRoomCode.CANCELMATCH_CREQ, null);
+        Dispatch(AreaCode.NET, 0, serverMsg);
     }
 
     /// <summary>

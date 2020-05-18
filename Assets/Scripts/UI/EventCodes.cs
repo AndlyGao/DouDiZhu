@@ -15,6 +15,22 @@ public class UIEvent
     public const int SHOW_ENTERROOMBTN_ACTIVE = 3;//匹配成功  进入房间按钮
     public const int CREATE_PANEL_ACTIVE = 4;//创建角色面板的显示
 
+    public const int SET_TABLE_CARDS = 5;//设置底牌
+    public const int SET_LEFTPLAYER_DATA = 6;//设置左边玩家的信息
+    public const int SET_RIGHTPLAYER_DATA = 13;//设置右边玩家的信息
+    public const int SET_MYPLAYER_DATA = 16;//设置自己玩家的信息
+
+    public const int PLAYER_READY = 7;//玩家准备
+    public const int PLAYER_ENTER = 8;//玩家进入
+    public const int PLAYER_LEAVE = 9;//玩家离开
+    public const int PLAYER_DIALOG = 10;//玩家聊天
+    public const int PLAYER_CHANGE_IDENTITY = 11;//改变身份
+    public const int PLAYER_HIDE_STATE = 12;//开始游戏，信息隐藏  该发牌了
+
+    public const int SHOW_PLAYER_JIAO_BTN_ACTIVE = 14;//玩家叫 按钮
+    public const int SHOW_PLAYER_CHUPAI_BTN_ACTIVE = 15;//玩家出牌按钮
+
+
     public const int MessageInfoPanel = int.MaxValue;// 
     
 }

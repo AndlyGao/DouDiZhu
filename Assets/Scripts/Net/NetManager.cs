@@ -63,6 +63,7 @@ public class NetManager : ManagerBase
     //处理注册登录
     HandlerBase accountHandler = new AccountHandler();
     HandlerBase userHandler = new UserHandler();
+    HandlerBase matchHandler = new MatchHandler();
     /// <summary>
     /// 处理服务器发来的消息
     /// </summary>
@@ -76,6 +77,9 @@ public class NetManager : ManagerBase
                 break;
             case OpCode.USER:
                 userHandler.OnReceive(msg.SubCode,msg.Value);
+                break;
+            case OpCode.MATCHROOM:
+                matchHandler.OnReceive(msg.SubCode, msg.Value);
                 break;
             default:
                 break;

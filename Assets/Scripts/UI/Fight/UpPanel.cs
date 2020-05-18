@@ -1,0 +1,47 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using Protocol.Dto.Card;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UpPanel : UIBase
+{
+    private void Awake()
+    {
+        Bind(UIEvent.SET_TABLE_CARDS);
+    }
+    public override void Execute(int eventCode, object message)
+    {
+        switch (eventCode)
+        {
+            case UIEvent.SET_TABLE_CARDS:
+                SetTableCards(message as CardDto[]);
+                break;
+            default:
+                break;
+        }
+        base.Execute(eventCode, message);
+    }
+
+    public override void OnDestroy()
+    {
+        UnBind();
+    }
+
+    private Image[] cardImg;
+
+    private void Start()
+    {
+        cardImg = new Image[3];
+        cardImg[0] = transform.Find("cardImag1").GetComponent<Image>();
+        cardImg[1] = transform.Find("cardImag2").GetComponent<Image>();
+        cardImg[2] = transform.Find("cardImag3").GetComponent<Image>();
+    }
+
+    private void SetTableCards(CardDto[] dto)
+    {
+        cardImg[0].sprite = Resources.Load<Sprite>("Poker/" + dto[0].name);
+        cardImg[1].sprite = Resources.Load<Sprite>("Poker/" + dto[1].name);
+        cardImg[2].sprite = Resources.Load<Sprite>("Poker/" + dto[2].name);
+    }
+}

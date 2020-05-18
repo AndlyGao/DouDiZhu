@@ -35,7 +35,7 @@ public class AccountHandler : HandlerBase
         {
             //跳转场景
             LoadSceneMsg msg = new LoadSceneMsg(1,()=> {
-                Debug.Log("场景加载成功 ：登陆成功");
+                Debug.Log("登陆成功 ：进入游戏界面");
                 //向服务器发送请求获取角色信息
                 serverMsg.Set(OpCode.USER,UserCode.GET_INFO_CREQ,null);
                 Dispatch(AreaCode.NET,0,serverMsg);

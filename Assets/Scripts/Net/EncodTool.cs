@@ -62,7 +62,8 @@ public static class EncodTool
                 //消息不够长
                 if (dataRemainLength < length)
                 {
-                    throw new Exception("数据长度不够包头信息约定的长度，无法构成一条完整的消息...");
+                    //throw new Exception("数据长度不够包头信息约定的长度，无法构成一条完整的消息...");
+                    return null;
                 }
 
                 byte[] dateArray = br.ReadBytes(length);
