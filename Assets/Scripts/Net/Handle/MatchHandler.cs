@@ -21,6 +21,9 @@ public class MatchHandler : HandlerBase
             case MatchRoomCode.CANCELMATCH_BRO:
                 CancelMatchBro((int)value);
                 break;
+            case MatchRoomCode.ENTERROOM_SRES:
+                EnterRoom(value as MatchRoomDto) ;
+                break;
             case MatchRoomCode.READY_BRO:
                 ReadyBro((int)value);
                 break;
@@ -34,19 +37,34 @@ public class MatchHandler : HandlerBase
 
     private void StartMatchResponse(MatchRoomDto dto)
     {
-        //存储本地
-        Models.gameModel.MatchRoomDto = dto;
-
+        int index = -1;
+        for (int i = 0; i < dto.uIdList.Count; i++)
+        {
+            if (dto.uIdList[i] == Models.gameModel.UserDto.id)
+            {
+                index = i + 1;
+            }
+        }
+        Debug.Log(string.Format("有{0}个人，我是第{1}个进来的", dto.uIdList.Count, index));
         //显示进入房间按钮
         Dispatch(AreaCode.UI,UIEvent.SHOW_ENTERROOMBTN_ACTIVE,null);
-        //更新 进入房间后的UI
+
+        Debug.Log(string.Format("匹配到房间{0} 里面有 {1} 个人", dto.id,dto.uIdUdtoDic.Count));
         
+    }
+
+    private void EnterRoom(MatchRoomDto dto)
+    {
+
+        //存储本地
+        Models.gameModel.MatchRoomDto = dto;
+        Debug.Log("更新房间信息成功");
         //更新现在在房间内的玩家
         UpdatePlayersInfo();
 
         //更新自己的信息
         UserDto myUserDto = Models.gameModel.UserDto;
-        Dispatch(AreaCode.UI,UIEvent.SET_MYPLAYER_DATA,myUserDto);
+        Dispatch(AreaCode.UI, UIEvent.SET_MYPLAYER_DATA, myUserDto);
     }
 
     /// <summary>
@@ -55,13 +73,15 @@ public class MatchHandler : HandlerBase
     /// <param name="dto"></param>
     private void StartMatchBro(UserDto dto)
     {
-        //战斗场景玩家状态信息更新
-        Dispatch(AreaCode.UI, UIEvent.PLAYER_ENTER, dto.id);
+        
         //更新房间其他角色信息
         Models.gameModel.MatchRoomDto.Add(dto);
        
         //更新现在在房间内的玩家
         UpdatePlayersInfo();
+
+        //战斗场景玩家状态信息更新
+       // Dispatch(AreaCode.UI, UIEvent.PLAYER_ENTER, dto.id);
         //给用户一个提示
         uiMsg.Set(string.Format("有新玩家 ：{0}  加入",dto.name),Color.green);
         Dispatch(AreaCode.UI,UIEvent.MessageInfoPanel,uiMsg);
@@ -70,16 +90,18 @@ public class MatchHandler : HandlerBase
 
     private void CancelMatchBro(int userId)
     {
-        //移除之前先把ui更新了
-        //玩家离开了房间  把准备文字和对话面板  地主或农民的ui隐藏
-        Dispatch(AreaCode.UI,UIEvent.PLAYER_LEAVE,userId);
-        //更新当前玩家信息
-        UpdatePlayersInfo();
-        //提示消息  xxx 离开了房间
-        uiMsg.Set(string.Format("玩家 ：{0}  离开", Models.gameModel.MatchRoomDto.GetNameById(userId)), Color.green);
-        Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
+        //移除之前先把信息保存下来
+        var leaveUserDto = Models.gameModel.MatchRoomDto.uIdUdtoDic[userId];
         //移除数据
         Models.gameModel.MatchRoomDto.Delete(userId);
+        //更新当前玩家信息
+        UpdatePlayersInfo();
+        //玩家离开了房间  把准备文字和对话面板  地主或农民的ui隐藏
+        Dispatch(AreaCode.UI, UIEvent.PLAYER_LEAVE, userId);
+        //提示消息  xxx 离开了房间
+        uiMsg.Set(string.Format("玩家 ：{0}  离开", leaveUserDto.name), Color.green);
+        Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
+        
     }
 
 
@@ -109,6 +131,7 @@ public class MatchHandler : HandlerBase
     /// </summary>
     private void UpdatePlayersInfo()
     {
+        
         //重置玩家在房间的位置信息
         Models.gameModel.MatchRoomDto.ResetPosition(Models.gameModel.UserDto.id);
         //更新现在在房间内的玩家

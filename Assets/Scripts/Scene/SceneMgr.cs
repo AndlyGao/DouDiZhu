@@ -36,6 +36,8 @@ public class SceneMgr : ManagerBase
     {
         if (this.OnSceneLoaded != null)
             OnSceneLoaded();
+        //调用完成重置
+        this.OnSceneLoaded = null;
     }
 
     public override void Execute(int eventCode, object message)

@@ -106,7 +106,10 @@ public class MatchPanel : UIBase {
     {
         LoadSceneMsg msg = new LoadSceneMsg(2,()=> {
             Debug.Log("匹配成功 ：进入战斗场景");
-            //TODO 进入了战斗场景需要干什么
+            //进入了战斗场景需要干什么
+            //获取当前房间信息
+            serverMsg.Set(OpCode.MATCHROOM,MatchRoomCode.ENTERROOM_CREQ,null);
+            Dispatch(AreaCode.NET,0,serverMsg);
         });
         //切换到战斗场景
         Dispatch(AreaCode.SCENE,SceneEvent.LOAD_SCENE,msg);
@@ -118,6 +121,7 @@ public class MatchPanel : UIBase {
     private void CancelMatch()
     {
         ObjectsActive(false);
+        enterBtn.gameObject.SetActive(false);
         serverMsg.Set(OpCode.MATCHROOM, MatchRoomCode.CANCELMATCH_CREQ, null);
         Dispatch(AreaCode.NET, 0, serverMsg);
     }
@@ -129,7 +133,7 @@ public class MatchPanel : UIBase {
     private void ObjectsActive(bool b) {
         promptInfoTxt.gameObject.SetActive(b);
         cancelBtn.gameObject.SetActive(b);
-
+        
         //初始化动画  起始点数
         dotCount = 0;
     }

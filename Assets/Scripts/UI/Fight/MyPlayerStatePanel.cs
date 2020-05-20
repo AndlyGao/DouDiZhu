@@ -38,7 +38,10 @@ public class MyPlayerStatePanel : StatePanel
 
             case UIEvent.SET_MYPLAYER_DATA:
                 {
-                    UserDto dto = message as UserDto;
+                    this.userDto = message as UserDto;
+                    identityImg.gameObject.SetActive(true);
+                    readyBtn.gameObject.SetActive(true);
+                    idTxt.text = userDto.name;
                 }
 
                 break;

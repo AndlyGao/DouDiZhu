@@ -19,6 +19,9 @@ public class RightPlayerStatePanel : StatePanel
         {
             case UIEvent.SET_RIGHTPLAYER_DATA:
                 this.userDto = message as UserDto;
+                idTxt.text = userDto.name;
+
+                SetPanelActive(true);
                 break;
             default:
                 break;
@@ -28,8 +31,16 @@ public class RightPlayerStatePanel : StatePanel
     protected override void Start()
     {
         base.Start();
-
-        SetPanelActive(false);
+        var roomDto = Models.gameModel.MatchRoomDto;
+        if (roomDto != null && roomDto.rightPlayerId != -1)
+        {
+            //有角色
+            this.userDto = Models.gameModel.MatchRoomDto.uIdUdtoDic[Models.gameModel.MatchRoomDto.rightPlayerId];
+        }
+        else
+        {
+            SetPanelActive(false);
+        }
     }
 
 

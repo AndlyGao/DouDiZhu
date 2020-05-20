@@ -23,19 +23,16 @@ public class UpPanel : UIBase
         base.Execute(eventCode, message);
     }
 
-    public override void OnDestroy()
-    {
-        UnBind();
-    }
+    
 
     private Image[] cardImg;
 
     private void Start()
     {
         cardImg = new Image[3];
-        cardImg[0] = transform.Find("cardImag1").GetComponent<Image>();
-        cardImg[1] = transform.Find("cardImag2").GetComponent<Image>();
-        cardImg[2] = transform.Find("cardImag3").GetComponent<Image>();
+        cardImg[0] = transform.Find("cardImg1").GetComponent<Image>();
+        cardImg[1] = transform.Find("cardImg2").GetComponent<Image>();
+        cardImg[2] = transform.Find("cardImg3").GetComponent<Image>();
     }
 
     private void SetTableCards(CardDto[] dto)

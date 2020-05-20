@@ -19,6 +19,8 @@ public class StatePanel : UIBase
     protected Image identityImg;
     protected Text dialogTxt;
 
+    protected Text idTxt;
+
     protected MessageData serverMsg;
 
     protected int showTime = 2;
@@ -28,10 +30,12 @@ public class StatePanel : UIBase
     protected virtual void Awake()
     {
         Bind(UIEvent.PLAYER_READY,UIEvent.PLAYER_LEAVE,UIEvent.PLAYER_ENTER,UIEvent.PLAYER_HIDE_STATE);
+        
     }
 
     public override void Execute(int eventCode, object message)
     {
+        if (userDto == null) return;
         switch (eventCode)
         {
             
@@ -46,25 +50,29 @@ public class StatePanel : UIBase
                 break;
             case UIEvent.PLAYER_LEAVE:
                 {
+                    
                     int userId = (int)message;
-                    if (userId == userDto.id)
+                    if ( userId == userDto.id)
                     {
+                        
                         SetPanelActive(false);
                     }
                 }
                 break;
             case UIEvent.PLAYER_ENTER:
                 {
+                   
                     int userId = (int)message;
+                   
                     if (userId == userDto.id)
                     {
-                        SetPanelActive(true);
+                       // SetPanelActive(true);
                     }
                 }
                 break;
             case UIEvent.PLAYER_HIDE_STATE:
                 {
-                    SetPanelActive(true);
+                    SetPanelActive(false);
                 }
                 break;
             default:
@@ -83,12 +91,15 @@ public class StatePanel : UIBase
         readyTxt = transform.Find("readyTxt").GetComponent<Text>();
         identityImg = transform.Find("identityImg").GetComponent<Image>();
         dialogTxt = transform.Find("dialogTxt").GetComponent<Text>();
+        idTxt = transform.Find("idTxt").GetComponent<Text>();
 
         serverMsg = new MessageData();
         //默认状态
         if(readyTxt != null)
             readyTxt.gameObject.SetActive(false);
         dialogTxt.gameObject.SetActive(false);
+
+        
     }
 
     /// <summary>

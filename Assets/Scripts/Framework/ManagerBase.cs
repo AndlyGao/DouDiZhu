@@ -57,12 +57,15 @@ public class ManagerBase : MonoBase
             list = new List<MonoBase>();
             list.Add(mono);
             dict.Add(eventCode, list);
+            //Debug.Log(eventCode.ToString() + " : " + mono.name);
             return;
         }
 
         //之前注册过
         list = dict[eventCode];
         list.Add(mono);
+        //Debug.Log(eventCode.ToString() + " : " + mono.name);
+
     }
 
     /// <summary>
