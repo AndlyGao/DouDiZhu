@@ -37,15 +37,7 @@ public class MatchHandler : HandlerBase
 
     private void StartMatchResponse(MatchRoomDto dto)
     {
-        int index = -1;
-        for (int i = 0; i < dto.uIdList.Count; i++)
-        {
-            if (dto.uIdList[i] == Models.gameModel.UserDto.id)
-            {
-                index = i + 1;
-            }
-        }
-        Debug.Log(string.Format("有{0}个人，我是第{1}个进来的", dto.uIdList.Count, index));
+        
         //显示进入房间按钮
         Dispatch(AreaCode.UI,UIEvent.SHOW_ENTERROOMBTN_ACTIVE,null);
 

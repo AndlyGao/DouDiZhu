@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Protocol.Dto;
+using Protocol.Dto.Constant;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,14 +24,13 @@ public class StatePanel : UIBase
 
     protected MessageData serverMsg;
 
-    protected int showTime = 2;
+    protected int showTime = 3;
     protected float timer = 0;
     private bool isShow = false;
 
     protected virtual void Awake()
     {
-        Bind(UIEvent.PLAYER_READY,UIEvent.PLAYER_LEAVE,UIEvent.PLAYER_ENTER,UIEvent.PLAYER_HIDE_STATE);
-        
+        Bind(UIEvent.PLAYER_READY,UIEvent.PLAYER_LEAVE,UIEvent.PLAYER_ENTER,UIEvent.PLAYER_HIDE_STATE,UIEvent.PLAYER_CHAT);
     }
 
     public override void Execute(int eventCode, object message)
@@ -74,6 +74,9 @@ public class StatePanel : UIBase
                 {
                     SetPanelActive(false);
                 }
+                break;
+            case UIEvent.PLAYER_CHAT:
+                ChatResponse(message as ChatMsg);
                 break;
             default:
                 break;
@@ -122,6 +125,8 @@ public class StatePanel : UIBase
         SetDialogActive(true);
         //显示动画
         isShow = true;
+        //当前还对话框还未消失  又重新发了一个消息
+        timer = 0;
     }
 
     protected virtual void Update()
@@ -145,5 +150,18 @@ public class StatePanel : UIBase
     protected void SetDialogActive(bool active)
     {
         dialogTxt.gameObject.SetActive(active);
+    }
+
+    protected virtual void ChatResponse(ChatMsg msg)
+    {
+        if (this.userDto == null) return;
+        //如果是自己
+        if (msg.userId == this.userDto.id)
+        {
+            //显示聊天框
+            ShowDialog(ChatConstant.GetContent(msg.chatMsgType));
+            //播放声音
+            Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,msg.chatMsgType);
+        }
     }
 }

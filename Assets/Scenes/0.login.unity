@@ -2678,6 +2678,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 537558911}
     m_Modifications:
+    - target: {fileID: 1135405630925270, guid: aff3cda8365f91443863b43fdbfa01e2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 222303856171456808, guid: aff3cda8365f91443863b43fdbfa01e2,
         type: 3}
       propertyPath: m_CullTransparentMesh

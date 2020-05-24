@@ -63,7 +63,11 @@ public class ManagerBase : MonoBase
 
         //之前注册过
         list = dict[eventCode];
-        list.Add(mono);
+        if (!list.Contains(mono))   //同一个id 不用绑定同一个mono  比如 Bind(0,1);  这样就不会重复绑定
+        {                           //如果是 Bind(0);  Bind(1);  这样写就会把0  重复绑定（绑定两次就会  遍历两次list，两次list中都有0）
+            list.Add(mono);
+        }
+        
         //Debug.Log(eventCode.ToString() + " : " + mono.name);
 
     }

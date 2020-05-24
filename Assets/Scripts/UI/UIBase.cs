@@ -15,10 +15,9 @@ public class UIBase : MonoBase
     /// <param name="eventCodes">Event codes.</param>
     protected void Bind(params int[] eventCodes)
     {
-        list.Clear();
         list.AddRange(eventCodes);
         UIManager.Instance.Add(list.ToArray(), this);
-        //Debug.Log(this.name);
+        //Debug.Log(list.Count);
     }
     
     /// <summary>
@@ -58,7 +57,7 @@ public class UIBase : MonoBase
     protected void SetPanelActive(bool active)
     {
         gameObject.SetActive(active);
-        Debug.Log(this.name + " : " + (active ? "显示" : "隐藏"));
+       // Debug.Log(this.name + " : " + (active ? "显示" : "隐藏"));
     }
 
 }

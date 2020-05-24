@@ -17,6 +17,8 @@ public class LeftPlayerStatePanel : StatePanel
     protected override void Start()
     {
         base.Start();
+
+        
         var roomDto = Models.gameModel.MatchRoomDto;
         if (roomDto != null && roomDto.rightPlayerId != -1)
         {
@@ -27,6 +29,8 @@ public class LeftPlayerStatePanel : StatePanel
         {
             SetPanelActive(false);
         }
+
+        
     }
 
     public override void Execute(int eventCode, object message)
@@ -37,6 +41,12 @@ public class LeftPlayerStatePanel : StatePanel
             case UIEvent.SET_LEFTPLAYER_DATA:
                 this.userDto = message as UserDto;
                 idTxt.text = userDto.name;
+                //有没有准备？
+                if (Models.gameModel.MatchRoomDto.readyUidList.Contains(this.userDto.id))
+                {
+                    readyTxt.gameObject.SetActive(true);
+                }
+                
 
                 SetPanelActive(true);
                 break;

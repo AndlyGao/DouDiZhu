@@ -43,6 +43,11 @@ public class NetManager : ManagerBase
         client.Connect();
     }
 
+    private void OnDisable()
+    {
+        client.DisConnect();
+    }
+
     private void Update()
     {
         if (client == null)
@@ -64,6 +69,7 @@ public class NetManager : ManagerBase
     HandlerBase accountHandler = new AccountHandler();
     HandlerBase userHandler = new UserHandler();
     HandlerBase matchHandler = new MatchHandler();
+    HandlerBase chatHandler = new ChatHandler();
     /// <summary>
     /// 处理服务器发来的消息
     /// </summary>
@@ -80,6 +86,9 @@ public class NetManager : ManagerBase
                 break;
             case OpCode.MATCHROOM:
                 matchHandler.OnReceive(msg.SubCode, msg.Value);
+                break;
+            case OpCode.CHAT:
+                chatHandler.OnReceive(msg.SubCode, msg.Value);
                 break;
             default:
                 break;

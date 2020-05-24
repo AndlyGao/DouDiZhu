@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Protocol.Code;
 using Protocol.Dto;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,9 +43,11 @@ public class MyPlayerStatePanel : StatePanel
                     identityImg.gameObject.SetActive(true);
                     readyBtn.gameObject.SetActive(true);
                     idTxt.text = userDto.name;
+                    UpdateBeens(" x " + userDto.beens.ToString());
                 }
-
                 break;
+
+            
             default:
                 break;
         }
@@ -92,6 +95,11 @@ public class MyPlayerStatePanel : StatePanel
         bujiaoBtn.onClick.RemoveListener(BuJiaoClick);
     }
 
+    public void UpdateBeens(string content)
+    {
+        beensTxt.text = content;
+    }
+
     protected override void SetReadyState()
     {
         base.SetReadyState();
@@ -100,7 +108,8 @@ public class MyPlayerStatePanel : StatePanel
 
     private void ReadyClick()
     {
-
+        serverMsg.Set(OpCode.MATCHROOM,MatchRoomCode.READY_CREQ,null);
+        Dispatch(AreaCode.NET, 0, serverMsg);
     }
 
 

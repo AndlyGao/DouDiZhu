@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+public class EventCodes {
+
+}
 
 /// <summary>
 /// 存储所有的UI事件码
@@ -23,21 +26,29 @@ public class UIEvent
     public const int PLAYER_READY = 7;//玩家准备
     public const int PLAYER_ENTER = 8;//玩家进入
     public const int PLAYER_LEAVE = 9;//玩家离开
-    public const int PLAYER_DIALOG = 10;//玩家聊天
     public const int PLAYER_CHANGE_IDENTITY = 11;//改变身份
     public const int PLAYER_HIDE_STATE = 12;//开始游戏，信息隐藏  该发牌了
+
+    public const int HIDE_PLAYER_READYBTN = 17;//隐藏player准备按钮
 
     public const int SHOW_PLAYER_JIAO_BTN_ACTIVE = 14;//玩家叫 按钮
     public const int SHOW_PLAYER_CHUPAI_BTN_ACTIVE = 15;//玩家出牌按钮
 
 
+    public const int PLAYER_CHAT = 18;//玩家聊天
+
     public const int MessageInfoPanel = int.MaxValue;// 
     
 }
 
+public class AudioEvent
+{
+    public const int EFFECTAUDIO = 0;
+    public const int BGMAUDIO = 0;
+}
 
 /// <summary>
-/// 关于ui消息的时间码
+/// 关于ui消息的事件码
 /// </summary>
 public class UIMsg {
     public string message;
@@ -54,6 +65,26 @@ public class UIMsg {
 
     public void SetMsg(string msg) {
         this.message = msg;
+    }
+}
+
+/// <summary>
+/// 聊天信息的事件码
+/// </summary>
+public class ChatMsg
+{
+    public int userId;
+    public int chatMsgType;
+
+    public ChatMsg()
+    {
+
+    }
+
+    public void Set(int userId,int chatMsgType)
+    {
+        this.userId = userId;
+        this.chatMsgType = chatMsgType;
     }
 }
 

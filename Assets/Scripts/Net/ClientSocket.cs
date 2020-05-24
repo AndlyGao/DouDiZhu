@@ -25,7 +25,23 @@ public class ClientSocket  {
 
         this.ip = ip;
         this.port = port;
+    }
 
+    public void DisConnect()
+    {
+       
+
+       
+        //清空数据
+        rcvBytes = null;
+        data.Clear();
+        isProcessRcvMsg = false;
+        messageDataQueue.Clear();
+
+        if (!clientSocket.Connected) return;
+        clientSocket.Shutdown(SocketShutdown.Both);
+        clientSocket.Close();
+        clientSocket = null;
     }
 
     public void Connect()
@@ -55,7 +71,7 @@ public class ClientSocket  {
     /// <summary>
     /// 一旦接受到数据，存到缓存区里面
     /// </summary>
-    private List<byte> data = new List<byte>();
+    private List<byte> data = new List<byte>(); 
 
     /// <summary>
     /// 是否正在处理消息
@@ -74,12 +90,13 @@ public class ClientSocket  {
     private void StartReceive() {
         if (clientSocket == null && !clientSocket.Connected)
         {
-            Debug.LogError("连接服务器失败...无法接受消息");
+            Debug.LogError("连接服务器失败...无法接受消息"); 
             return;
         }
 
         clientSocket.BeginReceive(rcvBytes,0,rcvBytes.Length,SocketFlags.None,ReceiveCallBack =>{
-
+            if (!clientSocket.Connected) return;
+            
             try
             {
                 int length = clientSocket.EndReceive(ReceiveCallBack);

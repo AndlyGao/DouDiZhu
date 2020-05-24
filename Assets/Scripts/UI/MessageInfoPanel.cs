@@ -58,12 +58,17 @@ public class MessageInfoPanel : UIBase
     /// <param name="color">消息的颜色</param>
     private void ShowUIPanel(string message, Color color)
     {
+        //先终止之前的动画
+
+        StopCoroutine("UIPanelAnimation");
         this.infoText.text = message;
         this.infoText.color = color;
         cg.alpha = 0;
         timer = 0;
+
+       
         //开始动画
-        StartCoroutine(UIPanelAnimation());
+        StartCoroutine("UIPanelAnimation");
     }
 
     IEnumerator UIPanelAnimation() {
