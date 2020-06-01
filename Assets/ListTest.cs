@@ -2,6 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum TestEnum
+{
+    haha,
+    hehe,
+}
 public class ReverserClass : IComparer<string>
 {
    // Call CaseInsensitiveComparer.Compare with the parameters reversed.
@@ -30,11 +36,16 @@ public class ReverserClassPerson : IComparer<Person>
 }
 public class ListTest : MonoBehaviour
 {
+   
+    public TestEnum testEnum = TestEnum.haha;
     private List<int> intList = new List<int>();
     private Dictionary<int, int> intDic = new Dictionary<int, int>();
     // Start is called before the first frame update
     void Start()
     {
+
+       
+        
         intList.Add(2);
         intList.Add(9);
         intList.Add(15);
@@ -55,8 +66,14 @@ public class ListTest : MonoBehaviour
         //{
         //    Debug.Log(item);
         //}
-        //intDic.Add(0,0);
-        //intDic.Add(1, 1);
+        intDic.Add(0, 0);
+        intDic.Add(3, 1);
+        int[] intArray = new int[3] { 2,2,2};
+        intDic.Keys.CopyTo(intArray,1);
+        foreach (var item in intArray)
+        {
+            Debug.Log(item);
+        }
         //intDic.Remove(0);
         //intDic.Add(0,0);
         //foreach (var item in intDic.Keys)
@@ -68,22 +85,34 @@ public class ListTest : MonoBehaviour
         //=========Class============
         //=============================
 
+
         var personList = new List<Person>();
         var zhangSan = new Person("张三", 20);
+
         personList.Add(zhangSan);
         personList.Add(new Person("李四",80));
         personList.Add(new Person("王二麻子",10));
         personList.Add(new Person("江峰",70));
         personList.Add(new Person("阿腾",100));
 
+        
         personList.Sort(zhangSan) ;
         
         foreach (var item in personList)
         {
-            Debug.Log(item.name);
+            //Debug.Log(item.name);
         }
 
+        var sixClass = new SixClass();
+        var temp = sixClass.People;
+        sixClass.People.RemoveRange(1,3);
+        //temp.Clear();
+        //temp.RemoveAt(0);
+        
+        sixClass.ConsleWrite();
 
+
+        return;
         // Initialize a string array.
         string[] words = { "The", "quick", "brown", "fox", "jumps", "over",
                          "the", "lazy", "dog" };
@@ -136,7 +165,32 @@ public class ListTest : MonoBehaviour
     }
 }
 
+public class SixClass {
+    public int Count { get; private set; }
+    public List<Person> People { get; private set; }
+    public SixClass()
+    {
+        People = new List<Person>();
+        People.Add(new Person("李四", 80));
+        People.Add(new Person("王二麻子", 10));
+        People.Add(new Person("江峰", 70));
+        People.Add(new Person("阿腾", 100));
+        Count = People.Count;
+    }
 
+    public List<Person> GetPerson()
+    {
+        return People;
+    }
+
+    public void ConsleWrite()
+    {
+        foreach (var item in People)
+        {
+            Debug.Log(item.name);
+        }
+    }
+}
 
 public class Person : IComparable<Person> ,IComparer<Person>
 {

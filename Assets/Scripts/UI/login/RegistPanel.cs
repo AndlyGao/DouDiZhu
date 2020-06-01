@@ -70,13 +70,13 @@ public class RegistPanel : UIBase
             return;
         }
 
-        if (string.IsNullOrEmpty(inputPassword.text)
-            || inputPassword.text.Length < 4
-            || inputPassword.text.Length > 16) {
-            uiMsg.Set("密码长度不正确（4-16位）...", Color.red);
-            Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
-            return;
-        }
+        //if (string.IsNullOrEmpty(inputPassword.text)
+        //    || inputPassword.text.Length < 4
+        //    || inputPassword.text.Length > 16) {
+        //    uiMsg.Set("密码长度不正确（4-16位）...", Color.red);
+        //    Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
+        //    return;
+        //}
 
         if (string.IsNullOrEmpty(inputRepeat.text)
             || inputRepeat.text != inputPassword.text) {

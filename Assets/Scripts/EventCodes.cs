@@ -37,6 +37,8 @@ public class UIEvent
 
     public const int PLAYER_CHAT = 18;//玩家聊天
 
+    public const int CHANGE_MUTIPLIER = 10;//改变当前倍数
+
     public const int MessageInfoPanel = int.MaxValue;// 
     
 }
@@ -45,6 +47,13 @@ public class AudioEvent
 {
     public const int EFFECTAUDIO = 0;
     public const int BGMAUDIO = 0;
+}
+
+public class CharactorEvent
+{
+    public const int SET_MYPLAYER_CARDS = 0;
+    public const int SET_LEFTPLAYER_CARDS = 1;
+    public const int SET_RIGHTLAYER_CARDS = 2;
 }
 
 /// <summary>

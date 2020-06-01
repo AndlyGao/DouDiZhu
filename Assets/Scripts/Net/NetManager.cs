@@ -45,7 +45,9 @@ public class NetManager : ManagerBase
 
     private void OnDisable()
     {
+#if UNITY_EDITOR
         client.DisConnect();
+#endif
     }
 
     private void Update()
@@ -70,6 +72,7 @@ public class NetManager : ManagerBase
     HandlerBase userHandler = new UserHandler();
     HandlerBase matchHandler = new MatchHandler();
     HandlerBase chatHandler = new ChatHandler();
+    HandlerBase fightHandler = new FightHandler();
     /// <summary>
     /// 处理服务器发来的消息
     /// </summary>
@@ -89,6 +92,9 @@ public class NetManager : ManagerBase
                 break;
             case OpCode.CHAT:
                 chatHandler.OnReceive(msg.SubCode, msg.Value);
+                break;
+            case OpCode.FIGHT:
+                fightHandler.OnReceive(msg.SubCode,msg.Value);
                 break;
             default:
                 break;

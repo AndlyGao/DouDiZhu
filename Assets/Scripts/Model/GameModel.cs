@@ -18,4 +18,6 @@ public class GameModel
     /// </summary>
     public MatchRoomDto MatchRoomDto { get; set; }
 
+    //public 
+
 }

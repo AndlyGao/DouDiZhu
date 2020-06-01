@@ -71,10 +71,10 @@ public class StartPanel : UIBase
         }
             
             
-        if (string.IsNullOrEmpty(inputPassword.text)
-            || inputPassword.text.Length < 4
-            || inputPassword.text.Length > 16)
-            return;
+        //if (string.IsNullOrEmpty(inputPassword.text)
+        //    || inputPassword.text.Length < 4
+        //    || inputPassword.text.Length > 16)
+        //    return;
 
         //需要和服务器交互了
         AccountDto dto = new AccountDto(inputAccount.text,inputPassword.text);

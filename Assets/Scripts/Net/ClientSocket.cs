@@ -29,9 +29,6 @@ public class ClientSocket  {
 
     public void DisConnect()
     {
-       
-
-       
         //清空数据
         rcvBytes = null;
         data.Clear();
@@ -95,10 +92,10 @@ public class ClientSocket  {
         }
 
         clientSocket.BeginReceive(rcvBytes,0,rcvBytes.Length,SocketFlags.None,ReceiveCallBack =>{
-            if (!clientSocket.Connected) return;
             
             try
             {
+                
                 int length = clientSocket.EndReceive(ReceiveCallBack);
                 byte[] rcvBuffer = new byte[length];
                 Buffer.BlockCopy(rcvBytes,0,rcvBuffer,0,length);
@@ -113,7 +110,6 @@ public class ClientSocket  {
             }
             catch (Exception e)
             {
-
                 Debug.LogError(e.Message);
             }
 

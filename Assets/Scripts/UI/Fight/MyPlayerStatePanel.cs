@@ -11,7 +11,7 @@ public class MyPlayerStatePanel : StatePanel
     protected override void Awake()
     {
         base.Awake();
-        Bind(UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE, UIEvent.SET_MYPLAYER_DATA);
+        Bind(UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE, UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
     }
 
     public override void Execute(int eventCode, object message)
@@ -46,7 +46,9 @@ public class MyPlayerStatePanel : StatePanel
                     UpdateBeens(" x " + userDto.beens.ToString());
                 }
                 break;
-
+            case UIEvent.CHANGE_MUTIPLIER:
+                UpdateMutiplier((int)message);
+                break;
             
             default:
                 break;
@@ -56,6 +58,7 @@ public class MyPlayerStatePanel : StatePanel
 
     private Button readyBtn;
     private Text beensTxt;
+    private Text mutiplierTxt;
     private Button chupaiBtn;
     private Button buchuBtn;
     private Button jiaoBtn;
@@ -67,6 +70,7 @@ public class MyPlayerStatePanel : StatePanel
         base.Start();
 
         beensTxt = transform.Find("beensTxt").GetComponent<Text>();
+        mutiplierTxt = transform.Find("mutiplierTxt").GetComponent<Text>();
         readyBtn = transform.Find("readyBtn").GetComponent<Button>();
         chupaiBtn = transform.Find("chupaiBtn").GetComponent<Button>();
         buchuBtn = transform.Find("buchuBtn").GetComponent<Button>();
@@ -98,6 +102,11 @@ public class MyPlayerStatePanel : StatePanel
     public void UpdateBeens(string content)
     {
         beensTxt.text = content;
+    }
+
+    public void UpdateMutiplier(int mutiplier)
+    {
+        mutiplierTxt.text = " X " + mutiplier;
     }
 
     protected override void SetReadyState()
