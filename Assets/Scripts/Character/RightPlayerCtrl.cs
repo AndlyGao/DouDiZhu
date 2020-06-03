@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RightPlayerCtrl : CharacterBase
@@ -20,6 +21,7 @@ public class RightPlayerCtrl : CharacterBase
     }
 
     private Transform cardParent;
+    private List<GameObject> myCardsList = new List<GameObject>();
 
     private void Start()
     {
@@ -28,6 +30,17 @@ public class RightPlayerCtrl : CharacterBase
 
     private IEnumerator InitCards()
     {
+        //如果已经有牌了全部清空
+        if (myCardsList.Count > 0)
+        {
+            foreach (var item in myCardsList)
+            {
+                Destroy(item);
+            }
+            myCardsList.Clear();
+        }
+        yield return new WaitForSeconds(0.2f);
+
         var cardPrefab = Resources.Load(GlobalData.OtherCardPath);
         for (int i = 0; i < 17; i++)
         {
@@ -41,5 +54,6 @@ public class RightPlayerCtrl : CharacterBase
         var cardGO = Instantiate(cardPrefab, cardParent) as GameObject;
         cardGO.transform.localPosition += new Vector3(GlobalData.OtherCardXOffset * index, 0);
         cardGO.GetComponent<SpriteRenderer>().sortingOrder = index;
+        myCardsList.Add(cardGO);
     }
 }

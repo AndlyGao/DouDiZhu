@@ -20,14 +20,10 @@ public class CardItem : MonoBehaviour
 	//render
 	private SpriteRenderer spriteRender;
 
-    private Vector3 startPos;
-
-    
-
     private void Start()
     {
         //spriteRender = GetComponent<SpriteRenderer>();
-        startPos = transform.localPosition;
+        //startPos = transform.localPosition;
     }
 
     public void Init(CardDto cardInfo,int index,bool isMine)
@@ -39,7 +35,7 @@ public class CardItem : MonoBehaviour
         if (IsSelect)
         {
             IsSelect = false;
-            transform.localPosition = startPos;
+            transform.localPosition -= new Vector3(0, GlobalData.CardSelectedYOffset, 0);
         }
 
         string path = "Poker/" + (isMine ? cardInfo.name : "CardBack");
@@ -58,7 +54,8 @@ public class CardItem : MonoBehaviour
         if (isMine)
         {
             this.IsSelect = !this.IsSelect;
-            transform.localPosition = this.IsSelect ? startPos + new Vector3(0, GlobalData.CardSelectedYOffset, 0) : startPos;
+            
+            transform.localPosition += new Vector3(0, GlobalData.CardSelectedYOffset, 0) * (this.IsSelect ? 1 : -1);
         }
     }
 }

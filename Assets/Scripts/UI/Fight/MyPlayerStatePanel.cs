@@ -11,7 +11,7 @@ public class MyPlayerStatePanel : StatePanel
     protected override void Awake()
     {
         base.Awake();
-        Bind(UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE, UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
+        Bind(UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
     }
 
     public override void Execute(int eventCode, object message)
@@ -19,14 +19,7 @@ public class MyPlayerStatePanel : StatePanel
         base.Execute(eventCode, message);
         switch (eventCode)
         {
-            case UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE:
-                {
-                    bool b = (bool)message;
-                    jiaoBtn.gameObject.SetActive(b);
-                    bujiaoBtn.gameObject.SetActive(b);
-                }
-               
-                break;
+            
 
             case UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE:
                 {
@@ -87,6 +80,7 @@ public class MyPlayerStatePanel : StatePanel
         buchuBtn.gameObject.SetActive(false);
         jiaoBtn.gameObject.SetActive(false);
         bujiaoBtn.gameObject.SetActive(false);
+        mutiplierTxt.gameObject.SetActive(false);
 
     }
     public override void OnDestroy()
@@ -99,6 +93,17 @@ public class MyPlayerStatePanel : StatePanel
         bujiaoBtn.onClick.RemoveListener(BuJiaoClick);
     }
 
+    protected override bool SetTurn(int userId)
+    {
+       var flag = base.SetTurn(userId);
+
+        jiaoBtn.gameObject.SetActive(flag);
+        bujiaoBtn.gameObject.SetActive(flag);
+
+        return flag;
+
+    }
+
     public void UpdateBeens(string content)
     {
         beensTxt.text = content;
@@ -106,6 +111,10 @@ public class MyPlayerStatePanel : StatePanel
 
     public void UpdateMutiplier(int mutiplier)
     {
+        if (!mutiplierTxt.gameObject.activeInHierarchy)
+        {
+            mutiplierTxt.gameObject.SetActive(true);
+        }
         mutiplierTxt.text = " X " + mutiplier;
     }
 
@@ -134,11 +143,13 @@ public class MyPlayerStatePanel : StatePanel
 
     private void JiaoClick()
     {
-
+        serverMsg.Set(OpCode.FIGHT, FightCode.QIANG_LANDLORD_CREQ, true);
+        Dispatch(AreaCode.NET, 0, serverMsg);
     }
 
     private void BuJiaoClick()
     {
-
+        serverMsg.Set(OpCode.FIGHT, FightCode.QIANG_LANDLORD_CREQ, false);
+        Dispatch(AreaCode.NET, 0, serverMsg);
     }
 }

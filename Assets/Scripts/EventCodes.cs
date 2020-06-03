@@ -34,6 +34,11 @@ public class UIEvent
     public const int SHOW_PLAYER_JIAO_BTN_ACTIVE = 14;//玩家叫 按钮
     public const int SHOW_PLAYER_CHUPAI_BTN_ACTIVE = 15;//玩家出牌按钮
 
+    public const int BUQIANG_LANDLORD_OPERATE = 19;
+    public const int QIANG_LANDLORD_OPERATE = 20;
+    public const int CHUPAI_OPERATE = 21;
+    public const int BUCHU_OPERATE = 22;
+
 
     public const int PLAYER_CHAT = 18;//玩家聊天
 

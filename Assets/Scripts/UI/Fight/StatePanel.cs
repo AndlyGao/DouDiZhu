@@ -17,6 +17,8 @@ public class StatePanel : UIBase
     protected UserDto userDto;
 
     protected Text readyTxt;
+    protected Text clockTxt;
+    protected Text operateTxt;
     protected Image identityImg;
     protected Text dialogTxt;
 
@@ -30,7 +32,14 @@ public class StatePanel : UIBase
 
     protected virtual void Awake()
     {
-        Bind(UIEvent.PLAYER_READY,UIEvent.PLAYER_LEAVE,UIEvent.PLAYER_ENTER,UIEvent.PLAYER_HIDE_STATE,UIEvent.PLAYER_CHAT);
+        Bind(UIEvent.PLAYER_READY,
+            UIEvent.PLAYER_LEAVE,
+            UIEvent.PLAYER_ENTER,
+            UIEvent.PLAYER_HIDE_STATE,
+            UIEvent.PLAYER_CHAT,
+            UIEvent.HIDE_PLAYER_READYBTN,
+            UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE,
+            UIEvent.BUQIANG_LANDLORD_OPERATE);
     }
 
     public override void Execute(int eventCode, object message)
@@ -38,7 +47,18 @@ public class StatePanel : UIBase
         if (userDto == null) return;
         switch (eventCode)
         {
-            
+            case UIEvent.BUQIANG_LANDLORD_OPERATE:
+                {
+                    BuQiangOperate((int)message);
+                }
+
+                break;
+            case UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE:
+                {
+                    SetTurn((int)message);
+                }
+
+                break;
             case UIEvent.PLAYER_READY:
                 {
                     int userId = (int)message;
@@ -72,17 +92,54 @@ public class StatePanel : UIBase
                 break;
             case UIEvent.PLAYER_HIDE_STATE:
                 {
-                    SetPanelActive(false);
+                    //SetPanelActive(false);
+                    //游戏开始了，准备txt隐藏
+                    readyTxt.gameObject.SetActive(false);
                 }
                 break;
             case UIEvent.PLAYER_CHAT:
                 ChatResponse(message as ChatMsg);
                 break;
+
             default:
                 break;
         }
     }
 
+    private void BuQiangOperate(int userId)
+    {
+        if (userDto.id == userId)//如果是自己 
+        {
+            if (!operateTxt.gameObject.activeInHierarchy)
+            {
+                operateTxt.gameObject.SetActive(true);
+            }
+            operateTxt.text = "不抢";
+        }
+    }
+
+    /// <summary>
+    /// turn 响应
+    /// </summary>
+    /// <param name="userId"></param>
+    protected virtual bool SetTurn(int userId)
+    {
+        //判断是不是自己叫
+        //如果是自己 叫地主和不叫地主的按钮显示出来 并把时钟显示出来
+        //不是自己 叫地主和不叫地主的按钮隐藏
+
+        var flag = userId == this.userDto.id;
+        clockTxt.gameObject.SetActive(flag);
+        if (flag && operateTxt.gameObject.activeInHierarchy)
+        {
+            operateTxt.gameObject.SetActive(false);
+        }
+        return flag;
+    }
+
+    /// <summary>
+    /// 准备响应
+    /// </summary>
     protected virtual void SetReadyState()
     {
         readyTxt.gameObject.SetActive(true);
@@ -92,6 +149,8 @@ public class StatePanel : UIBase
     protected virtual void Start()
     {
         readyTxt = transform.Find("readyTxt").GetComponent<Text>();
+        clockTxt = transform.Find("clockTxt").GetComponent<Text>();
+        operateTxt = transform.Find("operateTxt").GetComponent<Text>();
         identityImg = transform.Find("identityImg").GetComponent<Image>();
         dialogTxt = transform.Find("dialogTxt").GetComponent<Text>();
         idTxt = transform.Find("idTxt").GetComponent<Text>();
@@ -101,8 +160,8 @@ public class StatePanel : UIBase
         if(readyTxt != null)
             readyTxt.gameObject.SetActive(false);
         dialogTxt.gameObject.SetActive(false);
-
-        
+        clockTxt.gameObject.SetActive(false);
+        operateTxt.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -141,6 +200,15 @@ public class StatePanel : UIBase
                 isShow = false;
             }
         }
+    }
+
+    /// <summary>
+    /// 显示操作结果
+    /// </summary>
+    /// <param name="content"></param>
+    protected virtual void SetOperateResult(string content)
+    {
+
     }
 
     /// <summary>

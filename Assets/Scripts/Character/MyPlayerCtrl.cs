@@ -32,6 +32,17 @@ public class MyPlayerCtrl : CharacterBase
 
     private IEnumerator InitCards(List<CardDto> cards)
     {
+        //如果已经有牌了全部清空
+        if (myCardsList.Count > 0)
+        {
+            foreach (var item in myCardsList)
+            {
+                Destroy(item.gameObject);
+            }
+            myCardsList.Clear();
+        }
+        yield return new WaitForSeconds(0.2f);
+
         var cardPrefab = Resources.Load(GlobalData.MyCardPath);
         for (int i = 0; i < cards.Count; i++)
         {
