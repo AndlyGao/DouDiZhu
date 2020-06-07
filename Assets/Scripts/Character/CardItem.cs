@@ -5,6 +5,7 @@ using UnityEngine;
 /// </summary>
 public class CardItem : MonoBehaviour
 {
+    private bool isSelect;
 	/// <summary>
     /// 数据
     /// </summary>
@@ -12,7 +13,12 @@ public class CardItem : MonoBehaviour
 	/// <summary>
     /// 是否被选中
     /// </summary>
-	public bool IsSelect { get; set; }
+	public bool IsSelect { get { return this.isSelect; } set
+        {
+            this.isSelect = value;
+            transform.localPosition += new Vector3(0, GlobalData.CardSelectedYOffset, 0) * (this.isSelect ? 1 : -1);
+        }
+    }
     /// <summary>
     /// 是不是自己的牌  不是自己的不能点
     /// </summary>
@@ -26,7 +32,7 @@ public class CardItem : MonoBehaviour
         //startPos = transform.localPosition;
     }
 
-    public void Init(CardDto cardInfo,int index,bool isMine)
+    public void Init(CardDto cardInfo,int index,bool isMine,bool isTableCard = false)
     {
         this.CardInfo = cardInfo;
         this.isMine = isMine;
@@ -35,9 +41,7 @@ public class CardItem : MonoBehaviour
         if (IsSelect)
         {
             IsSelect = false;
-            transform.localPosition -= new Vector3(0, GlobalData.CardSelectedYOffset, 0);
         }
-
         string path = "Poker/" + (isMine ? cardInfo.name : "CardBack");
         var sp = Resources.Load<Sprite>(path);
         if (spriteRender == null)
@@ -46,6 +50,11 @@ public class CardItem : MonoBehaviour
         }
         this.spriteRender.sprite = sp;
         this.spriteRender.sortingOrder = index;
+
+        if (isTableCard)
+        {
+            IsSelect = true;
+        }
     }
 
 
@@ -54,8 +63,6 @@ public class CardItem : MonoBehaviour
         if (isMine)
         {
             this.IsSelect = !this.IsSelect;
-            
-            transform.localPosition += new Vector3(0, GlobalData.CardSelectedYOffset, 0) * (this.IsSelect ? 1 : -1);
         }
     }
 }

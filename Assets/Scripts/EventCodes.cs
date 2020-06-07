@@ -34,10 +34,10 @@ public class UIEvent
     public const int SHOW_PLAYER_JIAO_BTN_ACTIVE = 14;//玩家叫 按钮
     public const int SHOW_PLAYER_CHUPAI_BTN_ACTIVE = 15;//玩家出牌按钮
 
-    public const int BUQIANG_LANDLORD_OPERATE = 19;
-    public const int QIANG_LANDLORD_OPERATE = 20;
-    public const int CHUPAI_OPERATE = 21;
-    public const int BUCHU_OPERATE = 22;
+    public const int BUQIANG_LANDLORD_OPERATE = 19;//不抢 地主
+    public const int QIANG_LANDLORD_OPERATE = 20;//抢地主
+    public const int CHUPAI_OPERATE = 21;//出牌
+    public const int BUCHU_OPERATE = 22;//不出
 
 
     public const int PLAYER_CHAT = 18;//玩家聊天
@@ -59,6 +59,11 @@ public class CharactorEvent
     public const int SET_MYPLAYER_CARDS = 0;
     public const int SET_LEFTPLAYER_CARDS = 1;
     public const int SET_RIGHTLAYER_CARDS = 2;
+    public const int SET_LANDLORD_TABLECARDS = 3;
+
+    public const int CHUPAI = 4;
+    public const int BUCHU = 5;
+
 }
 
 /// <summary>

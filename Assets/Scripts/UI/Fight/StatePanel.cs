@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Protocol.Dto;
+using Protocol.Dto.Card;
 using Protocol.Dto.Constant;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,13 @@ public class StatePanel : UIBase
     protected UserDto userDto;
 
     protected Text readyTxt;
+    /// <summary>
+    /// 时钟txt  后期替换计时器
+    /// </summary>
     protected Text clockTxt;
+    /// <summary>
+    /// 抢不抢 处不处的提示Txt 到了自己出牌或者抢了，就该隐藏了
+    /// </summary>
     protected Text operateTxt;
     protected Image identityImg;
     protected Text dialogTxt;
@@ -39,7 +46,12 @@ public class StatePanel : UIBase
             UIEvent.PLAYER_CHAT,
             UIEvent.HIDE_PLAYER_READYBTN,
             UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE,
-            UIEvent.BUQIANG_LANDLORD_OPERATE);
+            UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE,
+            UIEvent.BUQIANG_LANDLORD_OPERATE,
+            UIEvent.QIANG_LANDLORD_OPERATE,
+            UIEvent.CHUPAI_OPERATE,
+            UIEvent.BUCHU_OPERATE,
+            UIEvent.PLAYER_CHANGE_IDENTITY);
     }
 
     public override void Execute(int eventCode, object message)
@@ -49,13 +61,46 @@ public class StatePanel : UIBase
         {
             case UIEvent.BUQIANG_LANDLORD_OPERATE:
                 {
-                    BuQiangOperate((int)message);
+                    SetOperateResult((int)message,"不抢");
                 }
 
                 break;
+            case UIEvent.QIANG_LANDLORD_OPERATE:
+                {
+                    // 抢地主要不要提示  有待商榷
+                    SetOperateResult((int)message,"抢地主");
+
+                }
+
+                break;
+            case UIEvent.CHUPAI_OPERATE:
+                {
+                    SetOperateResult(null);
+                }
+
+                break;
+            case UIEvent.BUCHU_OPERATE:
+                {
+                    SetOperateResult((int)message, "过");
+                }
+
+                break;
+            case UIEvent.PLAYER_CHANGE_IDENTITY:
+                {
+                    int userId = (int)message;
+                   
+                    SetIdentity(userId == userDto.id);
+                }
+                break;
             case UIEvent.SHOW_PLAYER_JIAO_BTN_ACTIVE:
                 {
-                    SetTurn((int)message);
+                    SetQiangTurn((int)message);
+                }
+
+                break;
+            case UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE:
+                {
+                    SetChuTurn((int)message);
                 }
 
                 break;
@@ -106,26 +151,69 @@ public class StatePanel : UIBase
         }
     }
 
-    private void BuQiangOperate(int userId)
+
+
+    /// <summary>
+    /// 显示操作结果
+    /// 如果是抢地主  ： 自己什么都不显示
+    /// 如果是出牌  ： 显示自己出的什么牌
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="content"></param>
+    protected virtual string SetOperateResult(int userId,string content)
     {
-        if (userDto.id == userId)//如果是自己 
+        var flag = userDto.id == userId;
+        if (flag)//如果是自己 
         {
+            clockTxt.gameObject.SetActive(flag);
+
             if (!operateTxt.gameObject.activeInHierarchy)
             {
                 operateTxt.gameObject.SetActive(true);
             }
-            operateTxt.text = "不抢";
+            operateTxt.text = content;
         }
+
+        return content;
     }
 
     /// <summary>
-    /// turn 响应
+    /// 出牌结果的单独方法
+    /// </summary>
+    /// <param name="cards"></param>
+    protected virtual void SetOperateResult(List<CardDto> cards)
+    {
+
+    }
+
+    /// <summary>
+    /// 抢地主 轮流转
     /// </summary>
     /// <param name="userId"></param>
-    protected virtual bool SetTurn(int userId)
+    protected virtual bool SetQiangTurn(int userId)
     {
         //判断是不是自己叫
         //如果是自己 叫地主和不叫地主的按钮显示出来 并把时钟显示出来
+        //不是自己 叫地主和不叫地主的按钮隐藏
+
+        var flag = userId == this.userDto.id;
+        clockTxt.gameObject.SetActive(flag);
+        if (flag && operateTxt.gameObject.activeInHierarchy)
+        {
+            operateTxt.gameObject.SetActive(false);
+        }
+        return flag;
+    }
+
+    /// <summary>
+    /// 出牌轮流转
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    protected virtual bool SetChuTurn(int userId)
+    {
+        //判断是不是自己出
+        //如果是自己 出牌和不出的按钮显示出来 并把时钟显示出来
         //不是自己 叫地主和不叫地主的按钮隐藏
 
         var flag = userId == this.userDto.id;
@@ -167,10 +255,10 @@ public class StatePanel : UIBase
     /// <summary>
     /// 设置身份 
     /// </summary>
-    /// <param name="identity">0就是地主  1 就是农民</param>
-    protected void SetIdentity(int identity)
+    /// <param name="identity"></param>
+    protected void SetIdentity(bool identity)
     {
-        string identityStr = identity == 0 ? "Landlord" : "Framer";
+        string identityStr = identity ? "Landlord" : "Farmer";
         identityImg.sprite = Resources.Load<Sprite>("Identity/" + identityStr);
     }
 
@@ -202,14 +290,7 @@ public class StatePanel : UIBase
         }
     }
 
-    /// <summary>
-    /// 显示操作结果
-    /// </summary>
-    /// <param name="content"></param>
-    protected virtual void SetOperateResult(string content)
-    {
-
-    }
+    
 
     /// <summary>
     /// 设置对面面板显示与隐藏

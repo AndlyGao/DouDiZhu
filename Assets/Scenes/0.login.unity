@@ -2945,6 +2945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b569f6c9c8444b388b428b7d02be00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Enable: 0
   testEnum: 0
 --- !u!20 &983818815
 Camera:

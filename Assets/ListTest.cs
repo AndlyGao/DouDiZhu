@@ -36,7 +36,7 @@ public class ReverserClassPerson : IComparer<Person>
 }
 public class ListTest : MonoBehaviour
 {
-   
+    public bool Enable;
     public TestEnum testEnum = TestEnum.haha;
     private List<int> intList = new List<int>();
     private Dictionary<int, int> intDic = new Dictionary<int, int>();
@@ -44,7 +44,10 @@ public class ListTest : MonoBehaviour
     void Start()
     {
 
-       
+        if (!Enable)
+        {
+            return;
+        }
         
         intList.Add(2);
         intList.Add(9);
@@ -88,19 +91,21 @@ public class ListTest : MonoBehaviour
 
         var personList = new List<Person>();
         var zhangSan = new Person("张三", 20);
-
+        
         personList.Add(zhangSan);
-        personList.Add(new Person("李四",80));
-        personList.Add(new Person("王二麻子",10));
-        personList.Add(new Person("江峰",70));
+        personList.Add(new Person("李四",80,Age.two));
+        personList.Add(new Person("王二麻子",10,Age.one));
+        personList.Add(new Person("江峰",70,Age.a));
         personList.Add(new Person("阿腾",100));
 
-        
-        personList.Sort(zhangSan) ;
-        
+
+        //personList.Sort(zhangSan) ;
+        personList.Sort((Person a,Person b) => {
+            return a.Age.CompareTo(b.Age);
+        });
         foreach (var item in personList)
         {
-            //Debug.Log(item.name);
+            Debug.Log(item.name);
         }
 
         var sixClass = new SixClass();
@@ -109,7 +114,7 @@ public class ListTest : MonoBehaviour
         //temp.Clear();
         //temp.RemoveAt(0);
         
-        sixClass.ConsleWrite();
+       //sixClass.ConsleWrite();
 
 
         return;
@@ -192,11 +197,12 @@ public class SixClass {
     }
 }
 
+public enum Age { none,one,two,a}
 public class Person : IComparable<Person> ,IComparer<Person>
 {
     public string name;
     public int age;
-
+    public Age Age = Age.none;
     public Person()
     {
     }
@@ -206,7 +212,12 @@ public class Person : IComparable<Person> ,IComparer<Person>
         this.name = name;
         this.age = age;
     }
-
+    public Person(string name, int age,Age Age)
+    {
+        this.name = name;
+        this.age = age;
+        this.Age = Age;
+    }
     public int Compare(Person x, Person y)
     {
         return y.CompareTo(x);

@@ -20,7 +20,11 @@ public class RightPlayerStatePanel : StatePanel
             case UIEvent.SET_RIGHTPLAYER_DATA:
                 this.userDto = message as UserDto;
                 idTxt.text = userDto.name;
-
+                //有没有准备？
+                if (Models.gameModel.MatchRoomDto.readyUidList.Contains(this.userDto.id))
+                {
+                    readyTxt.gameObject.SetActive(true);
+                }
                 SetPanelActive(true);
                 break;
             default:

@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Protocol.Dto;
+using Protocol.Dto.Fight;
 using UnityEngine;
 
 public class RightPlayerCtrl : CharacterBase
 {
     private void Awake()
     {
-        Bind(CharactorEvent.SET_RIGHTLAYER_CARDS);
+        Bind(CharactorEvent.SET_RIGHTLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS);
     }
     public override void Execute(int eventCode, object message)
     {
@@ -14,6 +16,10 @@ public class RightPlayerCtrl : CharacterBase
         {
             case CharactorEvent.SET_RIGHTLAYER_CARDS:
                 StartCoroutine(InitCards());
+                break;
+            
+            case CharactorEvent.SET_LANDLORD_TABLECARDS:
+                CreatTableCards(message as LandlordDto);
                 break;
             default:
                 break;
@@ -48,7 +54,18 @@ public class RightPlayerCtrl : CharacterBase
             yield return new WaitForSeconds(0.1f);
         }
     }
+    private void CreatTableCards(LandlordDto dto)
+    {
+        if (dto.landLordId == Models.gameModel.MatchRoomDto.rightPlayerId)//是自己
+        {
+            var cardPrefab = Resources.Load(GlobalData.OtherCardPath);
+            for (int i = 0; i < dto.tableCardsList.Count; i++)
+            {
+                CreatCard(myCardsList.Count, cardPrefab);
+            }
+        }
 
+    }
     private void CreatCard(int index, Object cardPrefab)
     {
         var cardGO = Instantiate(cardPrefab, cardParent) as GameObject;

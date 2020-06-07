@@ -15,12 +15,11 @@ public class UpPanel : UIBase
         switch (eventCode)
         {
             case UIEvent.SET_TABLE_CARDS:
-                SetTableCards(message as CardDto[]);
+                SetTableCards(message as List<CardDto>);
                 break;
             default:
                 break;
         }
-        base.Execute(eventCode, message);
     }
 
     
@@ -35,7 +34,7 @@ public class UpPanel : UIBase
         cardImg[2] = transform.Find("cardImg3").GetComponent<Image>();
     }
 
-    private void SetTableCards(CardDto[] dto)
+    private void SetTableCards(List<CardDto> dto)
     {
         cardImg[0].sprite = Resources.Load<Sprite>("Poker/" + dto[0].name);
         cardImg[1].sprite = Resources.Load<Sprite>("Poker/" + dto[1].name);

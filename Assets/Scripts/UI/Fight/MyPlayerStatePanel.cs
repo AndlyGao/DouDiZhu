@@ -11,7 +11,7 @@ public class MyPlayerStatePanel : StatePanel
     protected override void Awake()
     {
         base.Awake();
-        Bind(UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
+        Bind(UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
     }
 
     public override void Execute(int eventCode, object message)
@@ -20,16 +20,6 @@ public class MyPlayerStatePanel : StatePanel
         switch (eventCode)
         {
             
-
-            case UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE:
-                {
-                    bool b = (bool)message;
-                    chupaiBtn.gameObject.SetActive(b);
-                    buchuBtn.gameObject.SetActive(b);
-                }
-              
-                break;
-
             case UIEvent.SET_MYPLAYER_DATA:
                 {
                     this.userDto = message as UserDto;
@@ -93,9 +83,9 @@ public class MyPlayerStatePanel : StatePanel
         bujiaoBtn.onClick.RemoveListener(BuJiaoClick);
     }
 
-    protected override bool SetTurn(int userId)
+    protected override bool SetQiangTurn(int userId)
     {
-       var flag = base.SetTurn(userId);
+       var flag = base.SetQiangTurn(userId);
 
         jiaoBtn.gameObject.SetActive(flag);
         bujiaoBtn.gameObject.SetActive(flag);
@@ -103,6 +93,27 @@ public class MyPlayerStatePanel : StatePanel
         return flag;
 
     }
+
+    protected override bool SetChuTurn(int userId)
+    {
+        var flag = base.SetChuTurn(userId);
+        chupaiBtn.gameObject.SetActive(flag);
+        buchuBtn.gameObject.SetActive(flag);
+
+        return flag;
+    }
+    protected override string SetOperateResult(int userId, string content)
+    {
+        var str = base.SetOperateResult(userId, content);
+        if (str == "抢地主")
+        {
+            operateTxt.gameObject.SetActive(false);
+            jiaoBtn.gameObject.SetActive(false);
+            bujiaoBtn.gameObject.SetActive(false);
+        }
+        return null;
+    }
+
 
     public void UpdateBeens(string content)
     {
@@ -133,12 +144,14 @@ public class MyPlayerStatePanel : StatePanel
 
     private void ChuPaiClick()
     {
-
+        //出牌
+        Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI,null);
     }
 
     private void BuChuClick()
     {
-
+        serverMsg.Set(OpCode.FIGHT,FightCode.BUCHU_CREQ,null);
+        Dispatch(AreaCode.NET,0,serverMsg);
     }
 
     private void JiaoClick()
