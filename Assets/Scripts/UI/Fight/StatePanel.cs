@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Protocol.Dto;
 using Protocol.Dto.Card;
 using Protocol.Dto.Constant;
+using Protocol.Dto.Fight;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,7 +76,7 @@ public class StatePanel : UIBase
                 break;
             case UIEvent.CHUPAI_OPERATE:
                 {
-                    SetOperateResult(null);
+                    SetOperateResult(message as ChuPaiDto);
                 }
 
                 break;
@@ -181,7 +182,7 @@ public class StatePanel : UIBase
     /// 出牌结果的单独方法
     /// </summary>
     /// <param name="cards"></param>
-    protected virtual void SetOperateResult(List<CardDto> cards)
+    protected virtual void SetOperateResult(ChuPaiDto dto)
     {
 
     }

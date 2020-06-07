@@ -11,7 +11,7 @@ public class MyPlayerCtrl : CharacterBase
 {
     private void Awake()
     {
-        Bind(CharactorEvent.SET_MYPLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS,CharactorEvent.BUCHU,CharactorEvent.BUCHU);
+        Bind(CharactorEvent.SET_MYPLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS,CharactorEvent.BUCHU,CharactorEvent.CHUPAI);
     }
     public override void Execute(int eventCode, object message)
     {
