@@ -31,6 +31,7 @@ public class StatePanel : UIBase
     protected Text dialogTxt;
 
     protected Text idTxt;
+    protected Text chupaiResTxt;
 
     protected MessageData serverMsg;
 
@@ -52,7 +53,8 @@ public class StatePanel : UIBase
             UIEvent.QIANG_LANDLORD_OPERATE,
             UIEvent.CHUPAI_OPERATE,
             UIEvent.BUCHU_OPERATE,
-            UIEvent.PLAYER_CHANGE_IDENTITY);
+            UIEvent.PLAYER_CHANGE_IDENTITY,
+            UIEvent.GAME_RESTAET);
     }
 
     public override void Execute(int eventCode, object message)
@@ -147,6 +149,13 @@ public class StatePanel : UIBase
                 ChatResponse(message as ChatMsg);
                 break;
 
+            case UIEvent.GAME_RESTAET:
+                {
+                    //不抢的ui隐藏
+                    operateTxt.gameObject.SetActive(false);
+
+                }
+                break;
             default:
                 break;
         }
@@ -166,7 +175,7 @@ public class StatePanel : UIBase
         var flag = userDto.id == userId;
         if (flag)//如果是自己 
         {
-            clockTxt.gameObject.SetActive(flag);
+            //clockTxt.gameObject.SetActive(flag);
 
             if (!operateTxt.gameObject.activeInHierarchy)
             {
@@ -184,7 +193,15 @@ public class StatePanel : UIBase
     /// <param name="cards"></param>
     protected virtual void SetOperateResult(ChuPaiDto dto)
     {
-
+        var flag = dto.userId == this.userDto.id;
+        string content = string.Empty;
+        foreach (var card in dto.cardsList)
+        {
+            content += card.name;
+        }
+        //是自己
+        chupaiResTxt.gameObject.SetActive(flag) ;
+        chupaiResTxt.text = content;
     }
 
     /// <summary>
@@ -243,14 +260,16 @@ public class StatePanel : UIBase
         identityImg = transform.Find("identityImg").GetComponent<Image>();
         dialogTxt = transform.Find("dialogTxt").GetComponent<Text>();
         idTxt = transform.Find("idTxt").GetComponent<Text>();
+        chupaiResTxt = transform.Find("chupaiResTxt").GetComponent<Text>(); 
 
-        serverMsg = new MessageData();
+         serverMsg = new MessageData();
         //默认状态
         if(readyTxt != null)
             readyTxt.gameObject.SetActive(false);
         dialogTxt.gameObject.SetActive(false);
         clockTxt.gameObject.SetActive(false);
         operateTxt.gameObject.SetActive(false);
+        chupaiResTxt.gameObject.SetActive(false);
     }
 
     /// <summary>

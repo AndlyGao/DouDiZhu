@@ -8,7 +8,7 @@ public class RightPlayerCtrl : CharacterBase
 {
     private void Awake()
     {
-        Bind(CharactorEvent.SET_RIGHTLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS);
+        Bind(CharactorEvent.SET_RIGHTLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS,CharactorEvent.GMAE_RESTART);
     }
     public override void Execute(int eventCode, object message)
     {
@@ -20,6 +20,9 @@ public class RightPlayerCtrl : CharacterBase
             
             case CharactorEvent.SET_LANDLORD_TABLECARDS:
                 CreatTableCards(message as LandlordDto);
+                break;
+            case CharactorEvent.GMAE_RESTART://重新开始
+                Restart();
                 break;
             default:
                 break;
@@ -33,8 +36,7 @@ public class RightPlayerCtrl : CharacterBase
     {
         cardParent = transform.GetChild(0);
     }
-
-    private IEnumerator InitCards()
+    private void Restart()
     {
         //如果已经有牌了全部清空
         if (myCardsList.Count > 0)
@@ -45,6 +47,10 @@ public class RightPlayerCtrl : CharacterBase
             }
             myCardsList.Clear();
         }
+    }
+    private IEnumerator InitCards()
+    {
+        
         yield return new WaitForSeconds(0.2f);
 
         var cardPrefab = Resources.Load(GlobalData.OtherCardPath);

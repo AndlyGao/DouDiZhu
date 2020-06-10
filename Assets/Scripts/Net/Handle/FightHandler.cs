@@ -11,6 +11,9 @@ public class FightHandler : HandlerBase
     {
         switch (subCode)
         {
+            case FightCode.Restart:
+                Restart();
+                break;
             case FightCode.GET_CARDS_SRES:
                 GetCardsResponse(value as List<CardDto>);
                 break;
@@ -58,6 +61,17 @@ public class FightHandler : HandlerBase
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// 没人抢地主重新开始
+    /// </summary>
+    private void Restart()
+    {
+        //将ui隐藏
+        Dispatch(AreaCode.UI,UIEvent.GAME_RESTAET,null);
+        //重新洗牌
+        Dispatch(AreaCode.CHARACTER,CharactorEvent.GMAE_RESTART,null);
     }
 
 
@@ -113,7 +127,7 @@ public class FightHandler : HandlerBase
     private void ChuPaiResponse(ChuPaiDto dto)
     {
         //给玩家发消息，你出牌了 可以把牌移除了
-        Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI,dto);
+        Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI_SRES,dto);
         //告诉UI 把牌显示出来
         Dispatch(AreaCode.UI,UIEvent.CHUPAI_OPERATE,dto);
     }

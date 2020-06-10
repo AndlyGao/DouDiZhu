@@ -145,7 +145,7 @@ public class MyPlayerStatePanel : StatePanel
     private void ChuPaiClick()
     {
         //出牌
-        Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI,null);
+        Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI_CREQ,null);
     }
 
     private void BuChuClick()

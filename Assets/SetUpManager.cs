@@ -9,9 +9,9 @@ public class SetUpManager : MonoBehaviour
     /// </summary>
     public enum EResolution
     {
-        _1280x720 = 6,
-        _1600x900 = 14,
-        _1920x1080 = 18,
+        _1280x720 = 8,
+        _1600x900 = 13,
+        _1920x1080 = 15,
     }
     Resolution[] resolutions;
 
@@ -25,7 +25,7 @@ public class SetUpManager : MonoBehaviour
         //{
         //    Debug.Log(item.width + "x" + item.height);
         //}
-        SetResolution(EResolution._1280x720);
+        SetResolution(EResolution._1920x1080);
     }
 
     /// <summary>

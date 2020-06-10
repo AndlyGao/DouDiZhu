@@ -11,7 +11,7 @@ public class MyPlayerCtrl : CharacterBase
 {
     private void Awake()
     {
-        Bind(CharactorEvent.SET_MYPLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS,CharactorEvent.BUCHU,CharactorEvent.CHUPAI);
+        Bind(CharactorEvent.GMAE_RESTART, CharactorEvent.SET_MYPLAYER_CARDS, CharactorEvent.SET_LANDLORD_TABLECARDS,CharactorEvent.BUCHU,CharactorEvent.CHUPAI_CREQ,CharactorEvent.CHUPAI_SRES);
     }
     public override void Execute(int eventCode, object message)
     {
@@ -23,12 +23,15 @@ public class MyPlayerCtrl : CharacterBase
             case CharactorEvent.SET_LANDLORD_TABLECARDS:
                 CreatTableCards(message as LandlordDto);
                 break;
-            case CharactorEvent.BUCHU:
+            case CharactorEvent.CHUPAI_CREQ:
                 ChuPai();
                 break;
 
-            case CharactorEvent.CHUPAI://这是服务器发来的
+            case CharactorEvent.CHUPAI_SRES://这是服务器发来的
                 ChuPaiResonse(message as ChuPaiDto);
+                break;
+            case CharactorEvent.GMAE_RESTART://重新开始
+                Restart();
                 break;
             default:
                 break;
@@ -37,7 +40,7 @@ public class MyPlayerCtrl : CharacterBase
     /// <summary>
     /// 存储所有的牌
     /// </summary>
-    private List<CardItem> myCardsList = new List<CardItem>();
+    public List<CardItem> myCardsList = new List<CardItem>();
     /// <summary>
     /// 1.存储所有牌的信息。用来得到地主牌的时候，给重新排序 =》服务器只发了3张底牌过来
     /// 2.抢了地主以后也可以让服务器把底牌(3张) 和 所有的牌(17+3)发过来 就不需要这个List 
@@ -55,7 +58,10 @@ public class MyPlayerCtrl : CharacterBase
         cardParent = transform.GetChild(0);
     }
 
-    private IEnumerator InitCards(List<CardDto> cards)
+    /// <summary>
+    /// 重新开始
+    /// </summary>
+    private void Restart()
     {
         //如果已经有牌了全部清空
         if (myCardsList.Count > 0)
@@ -67,6 +73,11 @@ public class MyPlayerCtrl : CharacterBase
             myCardsList.Clear();
             myCard.Clear();
         }
+    }
+
+    private IEnumerator InitCards(List<CardDto> cards)
+    {
+        
         cards.SortEx();
         yield return new WaitForSeconds(0.2f);
 
@@ -151,7 +162,7 @@ public class MyPlayerCtrl : CharacterBase
         {
             for (int i = 0; i < myCardsList.Count; i++)
             {
-                if (myCardsList[i].CardInfo == card)
+                if (myCardsList[i].CardInfo.name == card.name)
                 {
                     myCardsList[i].gameObject.SetActive(false);
                     break;

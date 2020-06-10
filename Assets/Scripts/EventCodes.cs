@@ -39,6 +39,7 @@ public class UIEvent
     public const int CHUPAI_OPERATE = 21;//出牌
     public const int BUCHU_OPERATE = 22;//不出
 
+    public const int GAME_RESTAET = 23;//没人抢地主重新开始
 
     public const int PLAYER_CHAT = 18;//玩家聊天
 
@@ -61,8 +62,10 @@ public class CharactorEvent
     public const int SET_RIGHTLAYER_CARDS = 2;
     public const int SET_LANDLORD_TABLECARDS = 3;
 
-    public const int CHUPAI = 4;
+    public const int CHUPAI_CREQ = 4;
+    public const int CHUPAI_SRES = 6;
     public const int BUCHU = 5;
+    public const int GMAE_RESTART = 7;//重新洗牌
 
 }
 
