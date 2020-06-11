@@ -11,7 +11,7 @@ public class SetUpManager : MonoBehaviour
     {
         _1280x720 = 8,
         _1600x900 = 13,
-        _1920x1080 = 15,
+        _1920x1080 = 11,
     }
     Resolution[] resolutions;
 
@@ -21,10 +21,10 @@ public class SetUpManager : MonoBehaviour
         resolutions = Screen.resolutions;
 
         ////可以打印出来去选择自己需要的分辨率
-        //foreach (Resolution item in resolutions)
-        //{
-        //    Debug.Log(item.width + "x" + item.height);
-        //}
+        foreach (Resolution item in resolutions)
+        {
+            //Debug.Log(item.width + "x" + item.height);
+        }
         SetResolution(EResolution._1920x1080);
     }
 

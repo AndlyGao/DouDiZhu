@@ -21,7 +21,7 @@ public class MyPlayerCtrl : CharacterBase
                 StartCoroutine(InitCards(message as List<CardDto>));
                 break;
             case CharactorEvent.SET_LANDLORD_TABLECARDS:
-                CreatTableCards(message as LandlordDto);
+                StartCoroutine(CreatTableCards(message as LandlordDto));
                 break;
             case CharactorEvent.CHUPAI_CREQ:
                 ChuPai();
@@ -56,6 +56,15 @@ public class MyPlayerCtrl : CharacterBase
     private void Start()
     {
         cardParent = transform.GetChild(0);
+        //创建20张牌
+        for (int i = 0; i < 20; i++)
+        {
+            var cardPrefab = Resources.Load(GlobalData.MyCardPath);
+            var cardGO = Instantiate(cardPrefab, cardParent) as GameObject;
+            var cardItem = cardGO.GetComponent<CardItem>();
+            myCardsList.Add(cardItem);
+            cardGO.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -66,52 +75,88 @@ public class MyPlayerCtrl : CharacterBase
         //如果已经有牌了全部清空
         if (myCardsList.Count > 0)
         {
-            foreach (var item in myCardsList)
+            foreach (var card in myCardsList)
             {
-                Destroy(item.gameObject);
+                //Destroy(card.gameObject);
+                card.gameObject.SetActive(false);
             }
-            myCardsList.Clear();
+            //myCardsList.Clear();
             myCard.Clear();
         }
     }
 
+    //private IEnumerator InitCards(List<CardDto> cards)
+    //{
+
+    //    cards.SortEx();
+    //    yield return new WaitForSeconds(0.2f);
+
+    //    var cardPrefab = Resources.Load(GlobalData.MyCardPath);
+    //    for (int i = 0; i < cards.Count; i++)
+    //    {
+    //        CreatCard(cards[i], i, cardPrefab);
+    //        yield return new WaitForSeconds(0.1f);
+    //    }
+    //}
     private IEnumerator InitCards(List<CardDto> cards)
     {
-        
+
         cards.SortEx();
         yield return new WaitForSeconds(0.2f);
 
-        var cardPrefab = Resources.Load(GlobalData.MyCardPath);
         for (int i = 0; i < cards.Count; i++)
         {
-            CreatCard(cards[i],i,cardPrefab);
+            myCardsList[i].Init(cards[i],i,true);
+             myCard.Add(cards[i]);
             yield return new WaitForSeconds(0.1f);
         }
     }
 
-    private void CreatTableCards(LandlordDto dto)
+    //private void CreatTableCards(LandlordDto dto)
+    //{
+    //    if (dto.landLordId == Models.gameModel.UserDto.id)//是自己
+    //    {
+    //        var cardPrefab = Resources.Load(GlobalData.MyCardPath);
+    //        for (int i = 0; i < dto.tableCardsList.Count; i++)
+    //        {
+    //            CreatCard(dto.tableCardsList[i], myCardsList.Count, cardPrefab);
+    //        }
+    //        //排序
+    //        myCard.SortEx();
+    //        for (int i = 0; i < myCardsList.Count; i++)
+    //        {
+    //            myCardsList[i].Init(myCard[i], i, true, dto.tableCardsList.Contains(myCard[i]));
+    //        }
+    //    }
+
+    //}
+    private IEnumerator CreatTableCards(LandlordDto dto)
     {
         if (dto.landLordId == Models.gameModel.UserDto.id)//是自己
         {
-            var cardPrefab = Resources.Load(GlobalData.MyCardPath);
-            for (int i = 0; i < dto.tableCardsList.Count; i++)
-            {
-                CreatCard(dto.tableCardsList[i], myCardsList.Count, cardPrefab);
-            }
+            myCard.AddRange(dto.tableCardsList);
             //排序
             myCard.SortEx();
             for (int i = 0; i < myCardsList.Count; i++)
             {
-                myCardsList[i].Init(myCard[i],i,true,dto.tableCardsList.Contains(myCard[i]));
+                myCardsList[i].Init(myCard[i], i, true,dto.tableCardsList.Contains(myCard[i]));
+            }
+            yield return new WaitForSeconds(0.2f);
+            //给地主的牌选中
+            foreach (var card in myCardsList)
+            {
+                if (card.isTableCard)
+                {
+                    card.IsSelect = true;
+                }
             }
         }
-        
+
     }
 
     private void CreatCard(CardDto dto,int index,Object cardPrefab)
     {
         var cardGO = Instantiate(cardPrefab,cardParent) as GameObject;
-        cardGO.name = dto.name;
         var cardItem = cardGO.GetComponent<CardItem>();
         cardItem.Init(dto,index,true);
         myCardsList.Add(cardItem);
@@ -169,6 +214,23 @@ public class MyPlayerCtrl : CharacterBase
                 }
             }
         }
+        
+    }
+
+    private void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    //给地主的牌选中
+        //    foreach (var card in myCardsList)
+        //    {
+        //        if (card.isTableCard)
+        //        {
+        //            Debug.Log(card.name);
+        //            card.IsSelect = true;
+        //        }
+        //    }
+        //}
         
     }
 
