@@ -11,7 +11,11 @@ public class FightHandler : HandlerBase
     {
         switch (subCode)
         {
-            case FightCode.Restart:
+            
+            case FightCode.BACKTOFIGHT_SRES:
+                BackToFight();
+                break;
+            case FightCode.RESTART:
                 Restart();
                 break;
             case FightCode.GET_CARDS_SRES:
@@ -56,11 +60,34 @@ public class FightHandler : HandlerBase
 
                 break;
             case FightCode.OVER_BRO:
-
+                GameOver(value as OverDto);
                 break;
             default:
                 break;
         }
+    }
+
+    private void BackToFight()
+    {
+        //先把overPanel隐藏了
+        Dispatch(AreaCode.UI,UIEvent.BACKTOFIGHT,null);
+        ////重新开始  跟抢地主一样  instead of 直接回到匹配场景
+        //Restart();
+        LoadSceneMsg msg = new LoadSceneMsg(1, () => {
+            Debug.Log("返回匹配界面。。。");
+            //当前还没匹配。所以匹配数据要为空
+            Models.gameModel.MatchRoomDto = null;
+            //向服务器发送请求获取角色信息
+            var serverMsg = new MessageData();
+            serverMsg.Set(OpCode.USER, UserCode.GET_INFO_CREQ, null);
+            Dispatch(AreaCode.NET, 0, serverMsg);
+        });
+        Dispatch(AreaCode.SCENE,SceneEvent.LOAD_SCENE, msg);
+    }
+
+    private void GameOver(OverDto dto)
+    {
+        Dispatch(AreaCode.UI, UIEvent.GameOver, dto);
     }
 
     /// <summary>
@@ -70,7 +97,7 @@ public class FightHandler : HandlerBase
     {
         //将ui隐藏
         Dispatch(AreaCode.UI,UIEvent.GAME_RESTAET,null);
-        //重新洗牌
+        //将牌全部隐藏了
         Dispatch(AreaCode.CHARACTER,CharactorEvent.GMAE_RESTART,null);
     }
 

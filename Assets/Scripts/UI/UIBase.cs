@@ -54,7 +54,7 @@ public class UIBase : MonoBase
     /// 设置面板显示
     /// </summary>
     /// <param name="active"></param>
-    protected void SetPanelActive(bool active)
+    protected virtual void SetPanelActive(bool active)
     {
         gameObject.SetActive(active);
        // Debug.Log(this.name + " : " + (active ? "显示" : "隐藏"));
