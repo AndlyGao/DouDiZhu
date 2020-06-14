@@ -31,7 +31,9 @@ public class StatePanel : UIBase
     protected Text dialogTxt;
 
     protected Text idTxt;
-    protected Text chupaiResTxt;
+    //protected Text chupaiResTxt;
+    protected Transform chupaiParent;
+    protected List<CardItem> chupaiResultList = new List<CardItem>();
 
     protected MessageData serverMsg;
 
@@ -153,7 +155,9 @@ public class StatePanel : UIBase
                 {
                     //不抢的ui隐藏
                     operateTxt.gameObject.SetActive(false);
-
+                    //出牌结果ui隐藏
+                    //chupaiResTxt.gameObject.SetActive(false);
+                    HideChupaiResult();
                 }
                 break;
             default:
@@ -161,7 +165,32 @@ public class StatePanel : UIBase
         }
     }
 
+    /// <summary>
+    /// 隐藏出牌结果
+    /// </summary>
+    private void HideChupaiResult()
+    {
 
+        for (int i = 0; i < chupaiResultList.Count; i++)
+        {
+            chupaiResultList[i].gameObject.SetActive(false);
+        }
+    }
+    /// <summary>
+    /// 显示出牌结果
+    /// </summary>
+    /// <param name="cards"></param>
+    private void ShowChupaiResult(List<CardDto> cards)
+    {
+        //chupaiResTxt.gameObject.SetActive(true);
+        HideChupaiResult();
+        
+        for (int i = 0; i < cards.Count; i++)
+        {
+            chupaiResultList[i].Init(cards[i],i,true);
+        }
+        //chupaiResTxt.text = content;
+    }
 
     /// <summary>
     /// 显示操作结果
@@ -182,8 +211,13 @@ public class StatePanel : UIBase
                 operateTxt.gameObject.SetActive(true);
             }
             operateTxt.text = content;
+            if (content == "过")
+                //chupaiResTxt.gameObject.SetActive(false);
+                HideChupaiResult();
         }
-
+        if (content == "抢地主")
+            operateTxt.gameObject.SetActive(false);
+        
         return content;
     }
 
@@ -194,14 +228,20 @@ public class StatePanel : UIBase
     protected virtual void SetOperateResult(ChuPaiDto dto)
     {
         var flag = dto.userId == this.userDto.id;
-        string content = string.Empty;
-        foreach (var card in dto.cardsList)
-        {
-            content += card.name;
-        }
+        
+
         //是自己
-        chupaiResTxt.gameObject.SetActive(flag) ;
-        chupaiResTxt.text = content;
+        if (flag)
+        {
+            ShowChupaiResult(dto.cardsList);
+            //chupaiResTxt.gameObject.SetActive(true);
+            //string content = string.Empty;
+            //foreach (var card in dto.cardsList)
+            //{
+            //    content += card.name;
+            //}
+            //chupaiResTxt.text = content; 
+        }
     }
 
     /// <summary>
@@ -236,9 +276,11 @@ public class StatePanel : UIBase
 
         var flag = userId == this.userDto.id;
         clockTxt.gameObject.SetActive(flag);
-        if (flag && operateTxt.gameObject.activeInHierarchy)
+        if (flag)
         {
             operateTxt.gameObject.SetActive(false);
+            //chupaiResTxt.gameObject.SetActive(false);
+            HideChupaiResult();
         }
         return flag;
     }
@@ -260,16 +302,28 @@ public class StatePanel : UIBase
         identityImg = transform.Find("identityImg").GetComponent<Image>();
         dialogTxt = transform.Find("dialogTxt").GetComponent<Text>();
         idTxt = transform.Find("idTxt").GetComponent<Text>();
-        chupaiResTxt = transform.Find("chupaiResTxt").GetComponent<Text>(); 
+        //chupaiResTxt = transform.Find("chupaiResTxt").GetComponent<Text>();
+        chupaiParent = transform.Find("chupaiParent");
 
-         serverMsg = new MessageData();
+        //创建20张牌
+        for (int i = 0; i < 20; i++)
+        {
+            var cardPrefab = Resources.Load(GlobalData.MyCardPath);
+            var cardGO = Instantiate(cardPrefab, chupaiParent) as GameObject;
+            chupaiResultList.Add(cardGO.GetComponent<CardItem>());
+            Destroy(cardGO.GetComponent<BoxCollider2D>());
+            cardGO.SetActive(false);
+        }
+
+
+        serverMsg = new MessageData();
         //默认状态
         if(readyTxt != null)
             readyTxt.gameObject.SetActive(false);
         dialogTxt.gameObject.SetActive(false);
         clockTxt.gameObject.SetActive(false);
         operateTxt.gameObject.SetActive(false);
-        chupaiResTxt.gameObject.SetActive(false);
+        //chupaiResTxt.gameObject.SetActive(false);
     }
 
     /// <summary>

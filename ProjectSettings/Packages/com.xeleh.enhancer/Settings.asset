@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme:
     foldout: 1
-    darkEnabled: 1
+    darkEnabled: 0
     autoEnable: 1
   sidebar:
     foldout: 1

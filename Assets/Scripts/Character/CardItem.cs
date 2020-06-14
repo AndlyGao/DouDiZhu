@@ -17,7 +17,7 @@ public class CardItem : MonoBehaviour
 	public bool IsSelect { get { return this.isSelect; } set
         {
             this.isSelect = value;
-           
+            spriteRender.color = value ? Color.green : Color.white;
             transform.localPosition += new Vector3(0, GlobalData.CardSelectedYOffset, 0) * (this.isSelect ? 1 : -1);
 
         }
@@ -32,11 +32,12 @@ public class CardItem : MonoBehaviour
 	//render
 	private SpriteRenderer spriteRender;
 
-    private void Start()
+    private void Awake()
     {
-        //spriteRender = GetComponent<SpriteRenderer>();
-        
+        spriteRender = GetComponent<SpriteRenderer>();
+        this.IsSelect = false;
     }
+   
 
     public void Init(CardDto cardInfo,int index,bool isMine,bool isTableCard = false)
     {

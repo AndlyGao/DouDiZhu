@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public class MyPlayerStatePanel : StatePanel
 {
-    
+    public Text testChupaiTxt;
     protected override void Awake()
     {
         base.Awake();
-        Bind(UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER);
+        Bind(UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER,UIEvent.testChupai);
     }
 
     public override void Execute(int eventCode, object message)
@@ -19,7 +19,17 @@ public class MyPlayerStatePanel : StatePanel
         base.Execute(eventCode, message);
         switch (eventCode)
         {
-            
+            case UIEvent.testChupai:
+                {
+                    var msg = message as List<int>;
+                    var s = string.Empty;
+                    foreach (var int32 in msg)
+                    {
+                        s += int32+"/";
+                    }
+                    testChupaiTxt.text = s;
+                }
+                break;
             case UIEvent.SET_MYPLAYER_DATA:
                 {
                     this.userDto = message as UserDto;
@@ -99,7 +109,6 @@ public class MyPlayerStatePanel : StatePanel
         var flag = base.SetChuTurn(userId);
         chupaiBtn.gameObject.SetActive(flag);
         buchuBtn.gameObject.SetActive(flag);
-
         return flag;
     }
     protected override string SetOperateResult(int userId, string content)
@@ -107,7 +116,6 @@ public class MyPlayerStatePanel : StatePanel
         var str = base.SetOperateResult(userId, content);
         if (str == "抢地主")
         {
-            operateTxt.gameObject.SetActive(false);
             jiaoBtn.gameObject.SetActive(false);
             bujiaoBtn.gameObject.SetActive(false);
         }

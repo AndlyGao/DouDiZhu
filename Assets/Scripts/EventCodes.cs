@@ -39,6 +39,8 @@ public class UIEvent
     public const int CHUPAI_OPERATE = 21;//出牌
     public const int BUCHU_OPERATE = 22;//不出
 
+    public const int testChupai = 333;
+
     public const int GAME_RESTAET = 23;//没人抢地主重新开始
 
     public const int PLAYER_CHAT = 18;//玩家聊天

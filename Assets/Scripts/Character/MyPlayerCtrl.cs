@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Protocol.Code;
-using Protocol.Dto;
 using Protocol.Dto.Card;
 using Protocol.Dto.Constant;
 using Protocol.Dto.Fight;
@@ -77,6 +76,8 @@ public class MyPlayerCtrl : CharacterBase
         {
             foreach (var card in myCardsList)
             {
+                card.isTableCard = false;
+                card.IsSelect = false;
                 //Destroy(card.gameObject);
                 card.gameObject.SetActive(false);
             }
@@ -139,6 +140,7 @@ public class MyPlayerCtrl : CharacterBase
             myCard.SortEx();
             for (int i = 0; i < myCardsList.Count; i++)
             {
+                myCardsList[i].IsSelect = false;
                 myCardsList[i].Init(myCard[i], i, true,dto.tableCardsList.Contains(myCard[i]));
             }
             yield return new WaitForSeconds(0.2f);
@@ -180,8 +182,16 @@ public class MyPlayerCtrl : CharacterBase
                 tempList.Add(card.CardInfo);
             }
         }
+
+        if (tempList.Count == 0) return; 
         //排序
         tempList.SortEx();
+        List<int> ints = new List<int>();
+        foreach (var item in tempList)
+        {
+            ints.Add((int)item.weight);
+        }
+        Dispatch(AreaCode.UI,UIEvent.testChupai,ints);
         //判断是否合法 return
         chuDto.Set(Models.gameModel.UserDto.id,tempList);
         if (!chuDto.isLeagl)
@@ -202,13 +212,18 @@ public class MyPlayerCtrl : CharacterBase
     private void ChuPaiResonse(ChuPaiDto dto)
     {
         //将这些牌销毁(隐藏)
-
+        //由于是广播。所以需要判断一下id
+        if (dto.userId != Models.gameModel.UserDto.id)
+        {
+            return;
+        }
         foreach (var card in dto.cardsList)
         {
             for (int i = 0; i < myCardsList.Count; i++)
             {
                 if (myCardsList[i].CardInfo.name == card.name)
                 {
+                    myCardsList[i].IsSelect = false;
                     myCardsList[i].gameObject.SetActive(false);
                     break;
                 }
