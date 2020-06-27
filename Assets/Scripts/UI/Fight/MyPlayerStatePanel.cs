@@ -5,8 +5,10 @@ using Protocol.Dto;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class MyPlayerStatePanel : StatePanel
 {
+    
     public Text testChupaiTxt;
     protected override void Awake()
     {
@@ -40,7 +42,10 @@ public class MyPlayerStatePanel : StatePanel
                 }
                 break;
             case UIEvent.CHANGE_MUTIPLIER:
-                UpdateMutiplier((int)message);
+                {
+                    UpdateMutiplier((int)message);
+                    fightState = FightState.fight;
+                }
                 break;
             
             default:
@@ -56,6 +61,7 @@ public class MyPlayerStatePanel : StatePanel
     private Button buchuBtn;
     private Button jiaoBtn;
     private Button bujiaoBtn;
+    private Button exitBtn;
 
 
     protected override void Start()
@@ -69,12 +75,14 @@ public class MyPlayerStatePanel : StatePanel
         buchuBtn = transform.Find("buchuBtn").GetComponent<Button>();
         jiaoBtn = transform.Find("jiaoBtn").GetComponent<Button>();
         bujiaoBtn = transform.Find("bujiaoBtn").GetComponent<Button>();
+        exitBtn = transform.Find("exitBtn").GetComponent<Button>();
 
         readyBtn.onClick.AddListener(ReadyClick);
         chupaiBtn.onClick.AddListener(ChuPaiClick);
         buchuBtn.onClick.AddListener(BuChuClick);
         jiaoBtn.onClick.AddListener(JiaoClick);
         bujiaoBtn.onClick.AddListener(BuJiaoClick);
+        exitBtn.onClick.AddListener(Exit);
 
         chupaiBtn.gameObject.SetActive(false);
         buchuBtn.gameObject.SetActive(false);
@@ -92,6 +100,25 @@ public class MyPlayerStatePanel : StatePanel
         jiaoBtn.onClick.RemoveListener(JiaoClick);
         bujiaoBtn.onClick.RemoveListener(BuJiaoClick);
     }
+
+    protected void Exit() {
+
+        //像服务器发送消息。我退出了
+        switch (fightState)
+        {
+            case FightState.match:
+                serverMsg.Set(OpCode.MATCHROOM,MatchRoomCode.BACK_CREQ,null);
+                break;
+
+            case FightState.fight:
+                serverMsg.Set(OpCode.FIGHT, FightCode.BACKTOFIGHT_CREQ, null);
+                break;
+
+        }
+        Dispatch(AreaCode.NET,0,serverMsg);
+    }
+
+    
 
     protected override bool SetQiangTurn(int userId)
     {

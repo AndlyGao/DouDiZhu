@@ -6,13 +6,17 @@ using Protocol.Dto.Constant;
 using Protocol.Dto.Fight;
 using UnityEngine;
 using UnityEngine.UI;
-
+public enum FightState
+{
+    match,
+    fight,
+}
 /// <summary>
 /// player面板信息 基类
 /// </summary>
 public class StatePanel : UIBase
 {
-   
+    public FightState fightState = FightState.match;
     /// <summary>
     /// 角色的数据
     /// </summary>

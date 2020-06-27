@@ -56,8 +56,22 @@ public class FightHandler : HandlerBase
             case FightCode.BUQIANG_LANDLORD_BRO://谁不抢
                 BuQiangLandlordResponse((int)value);
                 break;
-            case FightCode.LEAVE_BRO:
-
+            case FightCode.LEAVE_BRO://离开了要干嘛？把ui隐藏了
+                {
+                    var userId = (int)value;
+                    if (Models.gameModel.MatchRoomDto != null)
+                    {
+                        //移除之前先把信息保存下来
+                        var leaveUserDto = Models.gameModel.MatchRoomDto.uIdUdtoDic[userId];
+                        //移除数据
+                        Models.gameModel.MatchRoomDto.Delete(userId);
+                        //玩家离开了房间  把准备文字和对话面板  地主或农民的ui隐藏
+                        Dispatch(AreaCode.UI, UIEvent.PLAYER_LEAVE, userId);
+                        //提示消息  xxx 离开了房间
+                        uiMsg.Set(string.Format("玩家 ：{0}  退出", leaveUserDto.name), Color.green);
+                        Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
+                    }
+                }
                 break;
             case FightCode.OVER_BRO:
                 GameOver(value as OverDto);

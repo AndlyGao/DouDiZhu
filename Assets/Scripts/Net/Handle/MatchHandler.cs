@@ -30,6 +30,20 @@ public class MatchHandler : HandlerBase
             case MatchRoomCode.START_BRO:
                 StartBro();
                 break;
+            case MatchRoomCode.BACK_SRES:
+                {
+                    LoadSceneMsg msg = new LoadSceneMsg(1, () => {
+                        Debug.Log("返回匹配界面。。。");
+                        //当前还没匹配。所以匹配数据要为空
+                        Models.gameModel.MatchRoomDto = null;
+                        //向服务器发送请求获取角色信息
+                        var serverMsg = new MessageData();
+                        serverMsg.Set(OpCode.USER, UserCode.GET_INFO_CREQ, null);
+                        Dispatch(AreaCode.NET, 0, serverMsg);
+                    });
+                    Dispatch(AreaCode.SCENE, SceneEvent.LOAD_SCENE, msg);
+                }
+                break;
             default:
                 break;
         }

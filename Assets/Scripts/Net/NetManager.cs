@@ -12,7 +12,8 @@ public class NetManager : ManagerBase
 {
     public static NetManager Instance = null;
 
-    private ClientSocket client = new ClientSocket("127.0.0.1", 6666);
+    private ClientSocket client = new ClientSocket("192.168.31.143", 6666);
+    //private ClientSocket client = new ClientSocket("35.236.135.83", 6666);
     private void Awake()
     {
         Instance = this;
