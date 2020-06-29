@@ -71,6 +71,8 @@ public class MatchHandler : HandlerBase
         //更新自己的信息
         UserDto myUserDto = Models.gameModel.UserDto;
         Dispatch(AreaCode.UI, UIEvent.SET_MYPLAYER_DATA, myUserDto);
+
+        
     }
 
     /// <summary>

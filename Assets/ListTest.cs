@@ -43,7 +43,6 @@ public class ListTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         if (!Enable)
         {
             return;

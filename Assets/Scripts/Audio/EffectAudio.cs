@@ -15,7 +15,7 @@ public class EffectAudio : AudioBase
         switch (eventCode)
         {
             case AudioEvent.EFFECTAUDIO:
-                PlayAudio((int)message);
+                PlayAudio(message as AudioMsg);
                 break;
             default:
                 break;
@@ -38,9 +38,9 @@ public class EffectAudio : AudioBase
         audioSource.loop = false;
     }
 
-    private void PlayAudio(int audioId)
+    private void PlayAudio(AudioMsg msg)
     {
-        AudioClip audio = Resources.Load<AudioClip>("Sound/Chat/Chat_" + audioId);
+        AudioClip audio = Resources.Load<AudioClip>(msg.path + msg.audioName);
         audioSource.PlayOneShot(audio);
     }
 }

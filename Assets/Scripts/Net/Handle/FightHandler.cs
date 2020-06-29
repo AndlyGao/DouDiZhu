@@ -1,17 +1,34 @@
 ﻿using System.Collections.Generic;
 using Protocol.Code;
 using Protocol.Dto.Card;
+using Protocol.Dto.Constant;
 using Protocol.Dto.Fight;
 using UnityEngine;
 
 public class FightHandler : HandlerBase
 {
     private UIMsg uiMsg = new UIMsg();
+    private AudioMsg audioMsg = new AudioMsg();
     public override void OnReceive(int subCode, object value)
     {
         switch (subCode)
         {
-            
+            case FightCode.BAOJING_SRES:
+                {
+                    if ((int)value == 1)//报警就剩一张牌了
+                    {
+                        audioMsg.Set("Sound/Fight/","baojing1");
+                        Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO, audioMsg);
+                        Dispatch(AreaCode.AUDIO, AudioEvent.BGMAUDIO, 2);
+                    }
+                    else if ((int)value == 2)//报警就剩两张牌了
+                    {
+                        audioMsg.Set("Sound/Fight/", "baojing2");
+                        Dispatch(AreaCode.AUDIO, AudioEvent.EFFECTAUDIO, audioMsg);
+                        Dispatch(AreaCode.AUDIO, AudioEvent.BGMAUDIO, 2);
+                    }
+                }
+                break;
             case FightCode.BACKTOFIGHT_SRES:
                 BackToFight();
                 break;
@@ -102,6 +119,7 @@ public class FightHandler : HandlerBase
     private void GameOver(OverDto dto)
     {
         Dispatch(AreaCode.UI, UIEvent.GameOver, dto);
+        
     }
 
     /// <summary>
@@ -132,6 +150,10 @@ public class FightHandler : HandlerBase
         //Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,);
         //显示抢地主操作结果。就像如果xx不抢，服务器会广播xx不抢，自己要把不抢的结果txt显示出来，其他玩家也要显示谁不抢的txt
         Dispatch(AreaCode.UI,UIEvent.QIANG_LANDLORD_OPERATE,dto.landLordId);
+
+        //播放抢地主音效
+        audioMsg.Set("Sound/Fight/", "Order");
+        Dispatch(AreaCode.AUDIO, AudioEvent.EFFECTAUDIO, audioMsg);
     }
 
 
@@ -149,20 +171,26 @@ public class FightHandler : HandlerBase
         Dispatch(AreaCode.CHARACTER,CharactorEvent.SET_MYPLAYER_CARDS,cards);
         Dispatch(AreaCode.CHARACTER,CharactorEvent.SET_LEFTPLAYER_CARDS,null);
         Dispatch(AreaCode.CHARACTER,CharactorEvent.SET_RIGHTLAYER_CARDS,null);
-       
+
+        //播放战斗音乐
+        Dispatch(AreaCode.AUDIO, AudioEvent.BGMAUDIO, 1);
+        
+
     }
 
     private void BuQiangLandlordResponse(int userId)
     {
         Dispatch(AreaCode.UI,UIEvent.BUQIANG_LANDLORD_OPERATE,userId);
-        //TODO 播放语音
+        audioMsg.Set("Sound/Fight/", "NoOrder");
+        Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,audioMsg);
     }
 
     private void BuChuResponse(int userId)
     {
         Dispatch(AreaCode.UI, UIEvent.BUCHU_OPERATE, userId);
-        //TODO 播放语音
 
+        audioMsg.Set("Sound/Fight/", "buyao"+ Random.Range(1, 5));
+        Dispatch(AreaCode.AUDIO, AudioEvent.EFFECTAUDIO, audioMsg);
     }
 
     private void ChuPaiResponse(ChuPaiDto dto)
@@ -171,6 +199,9 @@ public class FightHandler : HandlerBase
         Dispatch(AreaCode.CHARACTER,CharactorEvent.CHUPAI_SRES,dto);
         //告诉UI 把牌显示出来
         Dispatch(AreaCode.UI,UIEvent.CHUPAI_OPERATE,dto);
+        //播放语音出了什么牌
+        audioMsg.Set("Sound/Fight/", GetAudioName(dto));
+        Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,audioMsg);
     }
 
     private void TurnToQiang(int userId)
@@ -181,5 +212,59 @@ public class FightHandler : HandlerBase
     private void TurnToChu(int userId)
     {
         Dispatch(AreaCode.UI, UIEvent.SHOW_PLAYER_CHUPAI_BTN_ACTIVE, userId);
+    }
+
+    private string GetAudioName(ChuPaiDto dto)
+    {
+        string outStr = string.Empty;
+
+        if (dto.type == CardsType.Boom || dto.type == CardsType.Joker_Boom)
+        {
+            return dto.type.ToString();
+        }
+        
+
+        if (!dto.isBiggest)
+        {
+            //不是最大者出的牌 直接返回 大你说这压死
+            var rNum = Random.Range(1,4);
+            return "dani" + rNum;
+        }
+
+        //判断牌型
+        if (dto.type == CardsType.Single)
+        {
+            outStr += (int)dto.weight + 3;
+        }
+        else if (dto.type == CardsType.Double)
+        {
+            outStr += "dui" + ((int)dto.weight + 3);
+        }
+        else if (dto.type == CardsType.Straight)
+        {
+            outStr += "shunzi";
+        }
+        else if (dto.type == CardsType.Double_Straight)
+        {
+            outStr += "liandui";
+        }
+        else if (dto.type == CardsType.Three_Straight || dto.type == CardsType.Three_Straight_One || dto.type == CardsType.Three_Straight_Two)
+        {
+            outStr += "feiji";
+        }
+        else if (dto.type == CardsType.Three)
+        {
+            outStr += "tuple" + ((int)dto.weight + 3);
+        }
+        else if (dto.type == CardsType.Three_One)
+        {
+            outStr += "sandaiyi";
+        }
+        else if (dto.type == CardsType.Three_Two)
+        {
+            outStr += "sandaiyidui";
+        }
+
+        return outStr;
     }
 }

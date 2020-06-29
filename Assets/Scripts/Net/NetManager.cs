@@ -26,7 +26,12 @@ public class NetManager : ManagerBase
         switch (eventCode)
         {
             case 0:
-                client.StartSend(message as MessageData);
+                {
+                    if (client.IsConneted)
+                        client.StartSend(message as MessageData);
+                    else
+                        MsgCenter.Instance.Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, new UIMsg("网络未连接！",Color.red));
+                }
                 break;
             default:
                 break;

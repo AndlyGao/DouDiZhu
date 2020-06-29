@@ -40,6 +40,7 @@ public class StatePanel : UIBase
     protected List<CardItem> chupaiResultList = new List<CardItem>();
 
     protected MessageData serverMsg;
+    protected AudioMsg audioMsg;
 
     protected int showTime = 3;
     protected float timer = 0;
@@ -164,6 +165,7 @@ public class StatePanel : UIBase
                     HideChupaiResult();
                 }
                 break;
+            
             default:
                 break;
         }
@@ -321,6 +323,7 @@ public class StatePanel : UIBase
 
 
         serverMsg = new MessageData();
+        audioMsg = new AudioMsg();
         //默认状态
         if(readyTxt != null)
             readyTxt.gameObject.SetActive(false);
@@ -387,8 +390,9 @@ public class StatePanel : UIBase
         {
             //显示聊天框
             ShowDialog(ChatConstant.GetContent(msg.chatMsgType));
-            //播放声音
-            Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,msg.chatMsgType);
+
+            audioMsg.Set("Sound/Chat/Chat_",msg.chatMsgType.ToString());
+            Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,audioMsg);
         }
     }
 }

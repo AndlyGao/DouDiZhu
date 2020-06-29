@@ -39,6 +39,9 @@ public class AccountHandler : HandlerBase
                 //向服务器发送请求获取角色信息
                 serverMsg.Set(OpCode.USER,UserCode.GET_INFO_CREQ,null);
                 Dispatch(AreaCode.NET,0,serverMsg);
+
+                
+
             });
             Dispatch(AreaCode.SCENE,SceneEvent.LOAD_SCENE,msg);
 

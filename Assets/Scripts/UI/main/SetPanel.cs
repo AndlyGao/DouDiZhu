@@ -5,20 +5,6 @@ using UnityEngine.UI;
 
 public class SetPanel : UIBase {
 
-    private void Awake()
-    {
-        
-    }
-
-    public override void Execute(int eventCode, object message)
-    {
-        switch (eventCode)
-        {
-            default:
-                break;
-        }
-    }
-
     private Button setBtn;
     private Button closeBtn;
     private Toggle audioTog;
@@ -34,7 +20,9 @@ public class SetPanel : UIBase {
         closeBtn = transform.Find("closeBtn").GetComponent<Button>();
         quitBtn = transform.Find("quitBtn").GetComponent<Button>();
         audioTog = transform.Find("audioTog").GetComponent<Toggle>();
+        audioTog.isOn = !AudioManager.Instance.GetIsMute();
         volSld = transform.Find("volSld").GetComponent<Slider>();
+        volSld.value = AudioManager.Instance.GetVolume();
         bgImg = transform.Find("bgImg").GetComponent<Image>();
         audioTxt = transform.Find("audioTxt").GetComponent<Text>();
         volTxt = transform.Find("volTxt").GetComponent<Text>();
@@ -86,7 +74,7 @@ public class SetPanel : UIBase {
     private void AudioTogClick(bool flag)
     {
         //声音操作
-        //TODO
+        Dispatch(AreaCode.AUDIO,AudioEvent.ENABLE_OR_DISABLE_BGM,flag);
     }
     /// <summary>
     /// 滑动进度条时间
@@ -95,7 +83,7 @@ public class SetPanel : UIBase {
     private void VolSldValueChanged(float value)
     {
         //声音操作
-        //TODO
+        Dispatch(AreaCode.AUDIO, AudioEvent.CHANG_BGM_VOLUME, value);
     }
 
 }

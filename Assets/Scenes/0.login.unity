@@ -3173,18 +3173,18 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6B22\u8FCE\u52A0\u5165\u6597\u5730\u4E3B\u7684\u4E16\u754C\uFF01\r"
+  m_Text: "\u6CE8\u518C\u8D26\u53F7"
 --- !u!222 &1672734227
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3370,18 +3370,18 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 63
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u51C6\u5907\u597D\u6218\u6597\u4E86\u5417\uFF01\r"
+  m_Text: "\u767B\u9646"
 --- !u!222 &1805449070
 CanvasRenderer:
   m_ObjectHideFlags: 0

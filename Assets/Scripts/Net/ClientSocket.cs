@@ -27,6 +27,8 @@ public class ClientSocket  {
         this.port = port;
     }
 
+    public bool IsConneted { get { return clientSocket.Connected; } }
+
     public void DisConnect()
     {
         //清空数据

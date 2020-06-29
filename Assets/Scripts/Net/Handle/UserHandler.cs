@@ -60,6 +60,9 @@ public class UserHandler : HandlerBase
             //保存服务器发送来的角色数据
             Models.gameModel.UserDto = userDto;
 
+            //播放背景音乐
+            Dispatch(AreaCode.AUDIO, AudioEvent.BGMAUDIO, 0);
+
         }
     }
 
@@ -102,9 +105,10 @@ public class UserHandler : HandlerBase
             uiMsg.Set("没有角色", Color.red);
             Dispatch(AreaCode.UI, UIEvent.MessageInfoPanel, uiMsg);
         }
-        else if (userDto.info.Equals("角色上线成功"))
+        else if (userDto.info.Equals("上线成功"))
         {
             //TODO 角色上线之后干什么
+            
         }
     }
 

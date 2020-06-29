@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Protocol.Code;
 using Protocol.Dto;
+using Protocol.Dto.Fight;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ public class MyPlayerStatePanel : StatePanel
     protected override void Awake()
     {
         base.Awake();
-        Bind(UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER,UIEvent.testChupai);
+        Bind(UIEvent.SET_MYPLAYER_DATA,UIEvent.CHANGE_MUTIPLIER,UIEvent.testChupai,UIEvent.GameOver);
     }
 
     public override void Execute(int eventCode, object message)
@@ -47,7 +48,29 @@ public class MyPlayerStatePanel : StatePanel
                     fightState = FightState.fight;
                 }
                 break;
-            
+            case UIEvent.GameOver:
+                {
+                    var overDto = message as OverDto;
+                    bool isWin = overDto.winUserIdsList.Contains(this.userDto.id);
+                    int beens = 0;
+                    if (overDto.winIdentity == Identity.Landlord)
+                    {
+                        beens = isWin ? userDto.beens + overDto.beens : userDto.beens - overDto.beens / 2;
+                    }
+                    else
+                    {
+                        beens = isWin ? userDto.beens + overDto.beens / 2 : userDto.beens - overDto.beens;
+                    }                   
+                    //把豆子加一加
+                    UpdateBeens(" x " + beens);
+                    //暂停播放背景音乐
+                    Dispatch(AreaCode.AUDIO, AudioEvent.BGMAUDIO, -1);
+                    //播放结束音乐
+                    audioMsg.Set("Sound/Fight/",isWin ? "MusicEx_Win" : "MusicEx_Lose");
+                    Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO, audioMsg);
+                    //6s后播放背景音乐
+                }
+                break;
             default:
                 break;
         }

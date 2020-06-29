@@ -73,12 +73,25 @@ public class OverPanel : UIBase
         Dispatch(AreaCode.NET,0,serverMsg);
     }
     
-    private void GameOver(OverDto dto)
+    private void GameOver(OverDto overDto)
     {
-        var identity = dto.winIdentity;
+        var identity = overDto.winIdentity;
         //var winUser = dto.winUserIdsList;
-        var beens = dto.beens;
-        beensTxt.text = "欢乐豆 ：+ " + beens;
+        var beens = 0;
+
+        bool isWin = overDto.winUserIdsList.Contains(Models.gameModel.UserDto.id);
+        
+        if (overDto.winIdentity == Identity.Landlord)
+        {
+            beens = isWin ?  +overDto.beens :  overDto.beens / 2;
+        }
+        else
+        {
+            beens = isWin ?  +overDto.beens / 2 :  overDto.beens;
+        }
+
+
+        beensTxt.text = "欢乐豆 ："+ (isWin ? "+" : "-") + beens;
         resultTxt.text = identity.ToString() + "胜利";
         SetPanelActive(true);
     }

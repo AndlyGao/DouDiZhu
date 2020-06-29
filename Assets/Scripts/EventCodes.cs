@@ -56,7 +56,9 @@ public class UIEvent
 public class AudioEvent
 {
     public const int EFFECTAUDIO = 0;
-    public const int BGMAUDIO = 0;
+    public const int BGMAUDIO = 1;
+    public const int CHANG_BGM_VOLUME = 2;
+    public const int ENABLE_OR_DISABLE_BGM = 3;
 }
 
 public class CharactorEvent
@@ -80,6 +82,15 @@ public class UIMsg {
     public string message;
     public UnityEngine.Color color;
 
+    public UIMsg()
+    {
+
+    }
+    public UIMsg(string msg,UnityEngine.Color col)
+    {
+        this.message = msg;
+        this.color = col;
+    }
     public void Set(string msg,UnityEngine.Color col) {
         this.message = msg;
         this.color = col;
@@ -111,6 +122,22 @@ public class ChatMsg
     {
         this.userId = userId;
         this.chatMsgType = chatMsgType;
+    }
+}
+
+public class AudioMsg {
+    public string path;
+    public string audioName;
+
+    public AudioMsg()
+    {
+
+    }
+
+    public void Set(string path, string audioName)
+    {
+        this.path = path;
+        this.audioName = audioName;
     }
 }
 
