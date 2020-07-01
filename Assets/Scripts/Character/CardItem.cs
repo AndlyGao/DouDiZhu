@@ -5,8 +5,9 @@ using UnityEngine;
 /// </summary>
 public class CardItem : MonoBehaviour
 {
-    [SerializeField]
     private bool isSelect;
+    private Color selectingColor;
+
 	/// <summary>
     /// 数据
     /// </summary>
@@ -17,7 +18,7 @@ public class CardItem : MonoBehaviour
 	public bool IsSelect { get { return this.isSelect; } set
         {
             this.isSelect = value;
-            spriteRender.color = value ? Color.green : Color.white;
+            //spriteRender.color = value ? Color.green : Color.white;
             transform.localPosition += new Vector3(0, GlobalData.CardSelectedYOffset, 0) * (this.isSelect ? 1 : -1);
 
         }
@@ -34,6 +35,7 @@ public class CardItem : MonoBehaviour
 
     private void Awake()
     {
+        selectingColor = new Color(128 / 255, 255 / 255, 255 / 255, 1);
         spriteRender = GetComponent<SpriteRenderer>();
         this.IsSelect = false;
     }
@@ -63,7 +65,29 @@ public class CardItem : MonoBehaviour
     {
         if (isMine)
         {
-            this.IsSelect = !this.IsSelect;
+            SelectCardCtrl.Instance.PointerDownCard(this);
         }
+    }
+
+    public void BeingSelect(bool flag)
+    {
+        spriteRender.color = flag ? selectingColor : Color.white;
+    }
+
+    public void OnMouseEnter()
+    {
+        SelectCardCtrl.Instance.PointerEnterCard(this);
+
+    }
+
+
+    private void OnMouseUp()
+    {
+        SelectCardCtrl.Instance.PointerUpCard();
+    }
+
+    private void OnMouseExit()
+    {
+        SelectCardCtrl.Instance.PointerExitCard(this);
     }
 }

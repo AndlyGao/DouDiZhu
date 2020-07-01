@@ -193,6 +193,14 @@ public class MyPlayerStatePanel : StatePanel
         readyBtn.gameObject.SetActive(false);
     }
 
+    protected override void HideReayState()
+    {
+        base.HideReayState();
+        //抢不抢地主ui隐藏
+        jiaoBtn.gameObject.SetActive(false);
+        bujiaoBtn.gameObject.SetActive(false);
+    }
+
     private void ReadyClick()
     {
         serverMsg.Set(OpCode.MATCHROOM,MatchRoomCode.READY_CREQ,null);

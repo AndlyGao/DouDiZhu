@@ -16,6 +16,8 @@ public enum FightState
 /// </summary>
 public class StatePanel : UIBase
 {
+    private Coroutine timeCoroutine;
+
     public FightState fightState = FightState.match;
     /// <summary>
     /// 角色的数据
@@ -79,7 +81,6 @@ public class StatePanel : UIBase
                 {
                     // 抢地主要不要提示  有待商榷
                     SetOperateResult((int)message,"抢地主");
-
                 }
 
                 break;
@@ -149,7 +150,7 @@ public class StatePanel : UIBase
                 {
                     //SetPanelActive(false);
                     //游戏开始了，准备txt隐藏
-                    readyTxt.gameObject.SetActive(false);
+                    HideReayState();
                 }
                 break;
             case UIEvent.PLAYER_CHAT:
@@ -171,6 +172,8 @@ public class StatePanel : UIBase
         }
     }
 
+
+    
     /// <summary>
     /// 隐藏出牌结果
     /// </summary>
@@ -221,9 +224,10 @@ public class StatePanel : UIBase
                 //chupaiResTxt.gameObject.SetActive(false);
                 HideChupaiResult();
         }
-        if (content == "抢地主")
-            operateTxt.gameObject.SetActive(false);
-        
+        if (content == "抢地主") {
+            operateTxt.gameObject.SetActive(false);//操作结果ui隐藏
+        }
+
         return content;
     }
 
@@ -261,7 +265,21 @@ public class StatePanel : UIBase
         //不是自己 叫地主和不叫地主的按钮隐藏
 
         var flag = userId == this.userDto.id;
+
+        //将上次的计时取消
+        if (timeCoroutine != null)
+        {
+            StopCoroutine(timeCoroutine);
+            timeCoroutine = null;
+        }
+
+        clockTxt.text = 30.ToString();
         clockTxt.gameObject.SetActive(flag);
+        if (flag)
+        {
+            timeCoroutine = StartCoroutine(CalcuTime(clockTxt,30));
+        }
+        
         if (flag && operateTxt.gameObject.activeInHierarchy)
         {
             operateTxt.gameObject.SetActive(false);
@@ -281,9 +299,20 @@ public class StatePanel : UIBase
         //不是自己 叫地主和不叫地主的按钮隐藏
 
         var flag = userId == this.userDto.id;
+
+        //将上次的计时取消
+        if (timeCoroutine != null)
+        {
+            StopCoroutine(timeCoroutine);
+            timeCoroutine = null;
+        }
+
+        clockTxt.text = 30.ToString();
         clockTxt.gameObject.SetActive(flag);
         if (flag)
         {
+            timeCoroutine = StartCoroutine(CalcuTime(clockTxt,30));
+
             operateTxt.gameObject.SetActive(false);
             //chupaiResTxt.gameObject.SetActive(false);
             HideChupaiResult();
@@ -297,6 +326,25 @@ public class StatePanel : UIBase
     protected virtual void SetReadyState()
     {
         readyTxt.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 游戏开始了  需要隐藏一些东西
+    /// </summary>
+    protected virtual void HideReayState()
+    {
+        //准备按钮隐藏
+        readyTxt.gameObject.SetActive(false);
+        //计算time携程停止
+        clockTxt.gameObject.SetActive(false);
+        if (timeCoroutine != null)
+        {
+            StopCoroutine(timeCoroutine);
+            timeCoroutine = null;
+        }
+        
+
+        //抢不抢地主ui隐藏  需要override
     }
 
     // Start is called before the first frame update
@@ -393,6 +441,17 @@ public class StatePanel : UIBase
 
             audioMsg.Set("Sound/Chat/Chat_",msg.chatMsgType.ToString());
             Dispatch(AreaCode.AUDIO,AudioEvent.EFFECTAUDIO,audioMsg);
+        }
+    }
+
+    IEnumerator CalcuTime(Text txt,int num)
+    {
+        yield return new WaitForSeconds(1);
+
+        for (int i = num; i >= 0; i--)
+        {
+            txt.text = i.ToString();
+            yield return new WaitForSeconds(1);
         }
     }
 }
