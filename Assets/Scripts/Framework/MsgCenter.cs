@@ -19,10 +19,14 @@ public class MsgCenter : MonoBase
         gameObject.AddComponent<AudioManager>();
         gameObject.AddComponent<UIManager>();
         gameObject.AddComponent<CharacterManager>();
-        gameObject.AddComponent<NetManager>();
         gameObject.AddComponent<SceneMgr>();
-
+        gameObject.AddComponent<NetManager>();
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void StartGame()
+    {
+        Debug.Log("jhahahahah");
     }
 
     /// <summary>

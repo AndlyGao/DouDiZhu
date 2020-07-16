@@ -49,6 +49,9 @@ public class UIEvent
 
     public const int CHANGE_MUTIPLIER = 10;//改变当前倍数
 
+    public const int SHOW_UPDATE_CHOICE = 999;
+    public const int SHOW_CLOSEBTN = 998;
+
     public const int MessageInfoPanel = int.MaxValue;// 
     
 }

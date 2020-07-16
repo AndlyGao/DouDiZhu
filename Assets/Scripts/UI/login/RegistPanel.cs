@@ -2,7 +2,9 @@
 using Protocol.Dto;
 using UnityEngine;
 using UnityEngine.UI;
+using XLua;
 
+[Hotfix]
 public class RegistPanel : UIBase
 {
 
@@ -91,7 +93,7 @@ public class RegistPanel : UIBase
         serverMsg.Set(OpCode.ACCOUNT, AccountCode.REGISTER_CREQ, dto);
         Dispatch(AreaCode.NET, 0, serverMsg);
     }
-
+    
     private void CloseClick()
     {
         SetPanelActive(false);

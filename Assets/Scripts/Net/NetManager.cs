@@ -12,10 +12,11 @@ public class NetManager : ManagerBase
 {
     public static NetManager Instance = null;
 
-    private ClientSocket client = new ClientSocket("192.168.31.143", 6666);
-    //private ClientSocket client = new ClientSocket("35.236.135.83", 6666);
+    //private ClientSocket client = new ClientSocket("192.168.31.143", 6666);
+    private ClientSocket client = new ClientSocket("35.236.135.83", 6666);
     private void Awake()
     {
+        Debug.Log("当前服务器地址：35.236.135.83");
         Instance = this;
 
         Add(0,this);
